@@ -1,0 +1,201 @@
+SUBDIRS:= GUI \
+          audio_interface \
+          chardevice \
+          interface_parallel \
+          interface_rctran \
+          interface_rctran2 \
+          interface_serial2 \
+          interface_mnav \
+          interface_serpic \
+          interface_zhenhua	\
+          interface_software \
+          fdm_larcsim \
+          thermal03 \
+          fdm_002 \
+          power \
+          fdm_displaymode \
+          fdm_testmode \
+          math \
+          physics \
+          F3F
+
+CRRC_SRC_CPP = fdm.cpp \
+               crrc_main.cpp \
+               global.cpp \
+               power/power.cpp \
+               power/shaft.cpp \
+               power/simplethrust.cpp \
+               power/battery.cpp \
+               power/gearing.cpp \
+               power/propeller.cpp \
+               power/engine_dcm.cpp \
+               fdm_larcsim/fdm_larcsim.cpp \
+               fdm_displaymode/fdm_displaymode.cpp \
+               fdm_testmode/fdm_testmode.cpp \
+               math/vector3.cpp math/matrix33.cpp math/quaternion.cpp  \
+               math/pt1.cpp math/ratelim.cpp math/linearreg.cpp \
+               physics/eom.cpp math/intgr.cpp \
+               crrc_sound.cpp crrc_soundserver.cpp \
+               crrc_checkopts.cpp crrc_graphics.cpp \
+               crrc_loadair.cpp crrc_system.cpp \
+               SimpleXMLTransfer.cpp lib_conversions.cpp \
+               interface_serial2/LoggerReader_byte.cpp \
+               interface_serial2/LoggerReader_ttyS.cpp \
+               interface_serial2/tx_serial2.cpp \
+               chardevice/bufferedchardevice.cpp  \
+               chardevice/chardevicebase.cpp \
+               chardevice/chardevicec.cpp \
+               chardevice/chardevicewrapper.cpp \
+               chardevice/filechardevice.cpp \
+               chardevice/serialchardevice.cpp \
+               chardevice/socketchardevicebase.cpp \
+               chardevice/tcpchardevice.cpp \
+               chardevice/tcpserverchardevice.cpp \
+               chardevice/udpchardevice.cpp \
+               chardevice/udpserverchardevice.cpp \
+               interface_mnav/mnav.cpp \
+               interface_mnav/tx_mnav.cpp \
+               interface_rctran/tx_rctran.cpp \
+               interface_parallel/parallel.cpp \
+               interface_rctran2/tx_rctran2.cpp \
+               interface_serpic/tx_interface_serpic.cpp \
+               T_TX_InterfaceSerial.cpp \
+               interface_zhenhua/tx_interface_zhenhua.cpp \
+               audio_interface/tx_audio.cpp \
+               interface_software/tx_software.cpp \
+               tx_interfacePPM.cpp \
+               tx_interface.cpp \
+               mouse_kbd.cpp \
+               zoom.cpp \
+               windfield.cpp \
+               config.cpp \
+               crrc_keyboard.cpp \
+               crrc_sky.cpp \
+               crrc_scenery.cpp\
+               ImageLoaderTGA.cpp \
+               CVector.cpp \
+               CTime.cpp \
+               thermal03/solve.cpp \
+               thermal03/thermikschale.cpp \
+               thermal03/tschalen.cpp \
+               GUI/crrc_gui_main.cpp \
+               GUI/util.cpp \
+               GUI/crrc_slider.cpp \
+               GUI/crrc_spin.cpp \
+               GUI/crrc_dialog.cpp \
+               GUI/crrc_joy.cpp \
+               GUI/crrc_mousebutton.cpp \
+               GUI/crrc_ctrlgen.cpp \
+               GUI/crrc_video.cpp \
+               GUI/crrc_scaleinput.cpp \
+               GUI/crrc_windthermal.cpp \
+               GUI/crrc_launch.cpp \
+               GUI/crrc_audio.cpp \
+               GUI/crrc_msgbox.cpp GUI/crrc_planesel.cpp \
+               GUI/puaScrListBox.cpp GUI/puaFileBox.cpp \
+               GUI/puaGLPreview.cpp \
+               GUI/crrc_location.cpp \
+               GUI/crrc_calibmap.cpp \
+               GUI/crrc_f3f.cpp \
+               F3F/handlerF3F.cpp \
+               fdm_002/fdm_002.cpp \
+               xmlmodelfile.cpp \
+               crrc_rand.cpp \
+               airtoxml.cpp \
+               SimStateHandler.cpp \
+               crrc_animation.cpp \
+               glconsole.cpp \
+               atmos_62.cpp \
+               ls_geodesy.cpp \
+               ls_gravity.cpp
+
+
+
+CRRC_HEADERS = atmos_62.h ls_constants.h  \
+               global.h \
+               crrc_main.h crrc_graphics.h \
+               crrc_loadair.h crrc_system.h \
+               crrc_sound.h crrc_soundserver.h\
+               ls_geodesy.h ls_gravity.h \
+               ls_types.h \
+               mbuff.h ls_matrix.h crrc_config.h \
+               SimpleXMLTransfer.h lib_conversions.h \
+               interface_serial2/LoggerReader_byte.h interface_serial2/LoggerReader_ttyS.h \
+               interface_serial2/tx_serial2.h \
+               chardevice/bufferedchardevice.h \
+               chardevice/chardevicebase.h \
+               chardevice/chardevicec.h \
+               chardevice/chardevicecommon.h \
+               chardevice/chardevice.h \
+               chardevice/chardevicewrapper.h \
+               chardevice/filechardevice.h \
+               chardevice/serialchardevice.h \
+               chardevice/socketchardevicebase.h \
+               chardevice/tcpchardevice.h \
+               chardevice/tcpserverchardevice.h \
+               chardevice/udpchardevice.h \
+               chardevice/udpserverchardevice.h \
+               interface_mnav/mnav.h \
+               interface_mnav/tx_mnav.h \
+               interface_software/tx_software.h \
+               tx_interface.h \
+               tx_interfacePPM.h \
+               interface_rctran/tx_rctran.h \
+               interface_serpic/tx_interface_serpic.h \
+               T_TX_InterfaceSerial.h \
+               interface_zhenhua/tx_interface_zhenhua.h \
+               audio_interface/tx_audio.h \
+               interface_parallel/parallel.h \
+               interface_rctran2/tx_rctran2.h \
+               config.h \
+               mouse_kbd.h \
+               zoom.h \
+               windfield.h \
+               crrc_sky.h \
+               crrc_scenery.h \
+               ImageLoaderTGA.h \
+               CVector.h \
+               CTime.h \
+               include_gl.h \
+               SimStateHandler.h \
+               thermal03/tschalen.h \
+               thermal03/thermikschale.h \
+               thermal03/solve.h \
+               thermal03/thconf.h \
+               GUI/crrc_gui_main.h \
+               GUI/crrc_slider.h \
+               GUI/crrc_spin.h \
+               GUI/util.h \
+               GUI/crrc_ctrlgen.h \
+               GUI/crrc_dialog.h \
+               GUI/crrc_joy.h \
+               GUI/crrc_mousebutton.h \
+               GUI/crrc_video.h \
+               GUI/crrc_scaleinput.h \
+               GUI/crrc_windthermal.h \
+               GUI/crrc_launch.h \
+               GUI/crrc_msgbox.h GUI/crrc_planesel.h \
+               GUI/puaScrListBox.h GUI/puaFileBox.h \
+               GUI/puaGLPreview.h \
+               GUI/crrc_location.h \
+               GUI/crrc_calibmap.h \
+               GUI/crrc_f3f.h \
+               F3F/handlerF3F.h \
+               crrc_animation.h \
+               glconsole.h
+
+CRRC_OBJECTS := $(subst .cpp,.o,$(CRRC_SRC_CPP))
+CRRC_DEPS    := $(subst .cpp,.d,$(CRRC_SRC_CPP))
+
+CRRC_OBJECTS_S := $(foreach file,$(CRRC_OBJECTS),out/$(file))
+CRRC_DEPS_S    := $(foreach file,$(CRRC_DEPS),out/$(file))
+SUBDIRS_S      := $(foreach file,$(SUBDIRS),out/$(file))
+
+INDENT_CFG := -nbad -bap -nbc -bbo -bl -bli0 -bls -ncdb -nce -cp1 -cs -di2 \
+              -ndj -nfc1 -nfca -hnl -i2 -ip5 -lp -npcs -nprs -npsl -saf -sai \
+              -saw -nsc -nsob -nut -ts2
+
+ASTYLE_CFG := --style=ansi -s2 -C --convert-tabs -S
+
+CFLAGS_PLIB = -DPU_USE_SDL
+LFLAGS_PLIB = -lplibssg -lplibsg -lplibpu -lplibul -lplibfnt

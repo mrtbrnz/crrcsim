@@ -1,0 +1,57 @@
+Todd R. Templeton
+UC Berkeley
+ttemplet@eecs.berkeley.edu
+12/28/06
+
+
+These patches allow CRRCSim to interface to the Crossbow MNAV autopilot available at http://sourceforge.net/projects/micronav (which is meant to run on a Crossbow Stargate board running Linux, but which compiles and runs just fine under normal desktop Linux or Windows (under Cygwin)), by emulating a Crossbow MNAV navigation and servo control board (product information available at http://www.xbow.com/Products/productdetails.aspx?sid=193). Note that this functionality requires patches to the autopilot, which are being provided to Crossbow and will hopefully be available in the next release.
+
+
+Modifications (numbers correspond to reasons in lists below):
+1.  added MNAV interface in interface_mnav
+2.  added ability to get (world) velocity, (world) acceleration, (body) angular velocity, and lat/lon/alt out of simulator core (required for (1))
+3.  fixed seg fault in crrc_soundserver.cpp
+4.  added -s command line option and sound.enabled config file option to enable/disable sound, added -u command line option and video.enabled config file option to enable/disable user interface
+5.  added -g command line option to specify config file
+6.  added display mode fdm in fdm_displaymode
+7.  added 4 auxiliary 3-way switches triggered by F{1,2,3,4} and then {1,2,3}
+8.  fixed compilation problem on PPC Linux
+9.  fixed compilation problem on Windows
+10. added ability to get simulation time (number of simulation steps * dt) (needed to properly timestamp data from simulator core)
+
+
+Modified files:                     (Reason for Modification)
+GUI/crrc_ctrlgen.cpp                (1)
+Makefile.common                     (1,6)
+Makefile.macosx                     (1)
+config.cpp                          (5)
+config.h                            (5)
+crrcsim.dev                         (1,6,9)
+crrc_checkopts.cpp                  (1,4)
+crrc_main.cpp                       (1,4,5,6,7)
+crrc_main.h                         (7)
+tx_interface.cpp                    (1)
+tx_interface.h                      (1)
+fdm.cpp                             (6)
+fdm.h                               (2,6)
+fdm_larcsim/fdm_larcsim.cpp         (2)
+fdm_larcsim/fdm_larcsim.h           (2,6)
+crrc_soundserver.cpp                (3)
+crrc_scenery.cpp                    (4)
+crrc_keyboard.cpp                   (4,7)
+crrc_inputs.h                       (7)
+interface_parallel/parallel.cpp     (8)
+global.h                            (6)
+global.cpp                          (6)
+SimStateHandler.cpp                 (4,10)
+SimStateHandler.h                   (10)
+
+Added files:                        (Reason for Addition)
+chardevice.cpp                      (1,6)
+chardevice.h                        (1,6)
+interface_mnav/tx_mnav.cpp          (1)
+interface_mnav/tx_mnav.h            (1)
+interface_mnav/mnav.cpp             (1)
+interface_mnav/mnav.h               (1)
+fdm_displaymode/fdm_displaymode.h   (6)
+fdm_displaymode/fdm_displaymode.cpp (6)

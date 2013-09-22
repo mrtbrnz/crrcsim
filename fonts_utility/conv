@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+c++ -g -o ft2texfont ft2texfont.c -I/usr/include/freetype2 -lfreetype -lz
+cc -o showtxf showtxf.c texfont.c -lglut -lGLU -lGL -lXmu -lXext -lX11 -lm
+
+./ft2texfont \
+    -ff /usr/share/fonts/truetype/freefont/FreeSans.ttf \
+    -file ../textures/Sans_iso8859-2.txf \
+    -set ISO_8859-2 \
+    -w 256 \
+    -h 256 \
+    -size 24 \
+    -gap 1
+ 
+./showtxf -v -f ../textures/Sans_iso8859-2.txf
+

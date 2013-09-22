@@ -1,0 +1,51 @@
+include Makefile.common
+
+# Optimization options. Adjust for your system.
+OPT_FLAGS := # -march=i686
+
+all: crrcsim.exe
+
+
+MINGW = ../mingw
+
+CC  = $(MINGW)/bin/i686-pc-mingw32-g++
+C++ = $(MINGW)/bin/i686-pc-mingw32-g++
+
+# remove implicit rules
+.SUFFIXES:
+
+
+CRRC_CFLAGS = -Wall -O3 -I$(MINGW)/include `$(MINGW)/bin/sdl-config --cflags` \
+              $(OPT_FLAGS) $(CFLAGS_PLIB)
+
+CRRC_LINKER_FLAGS = -lm -L$(MINGW)/lib -ldlportio \
+                    -lopengl32 -lglu32 `$(MINGW)/bin/sdl-config --libs` \
+                    $(LFLAGS_PLIB)
+
+crrcsim.exe: ${CRRC_OBJECTS}
+	$(CC) -o crrcsim.exe ${CRRC_OBJECTS} ${CRRC_LINKER_FLAGS}
+	
+%.o: %.c $(CRRC_HEADERS) Makefile
+	$(CC) $< -o $@ -c ${CRRC_CFLAGS}
+
+%.o: %.cpp $(CRRC_HEADERS) Makefile
+	$(C++) $< -o $@ -c ${CRRC_CFLAGS}
+
+clean:
+	rm -f *.o
+
+mrproper:
+	rm -f *.o crrcsim.exe
+
+package: crrcsim.exe
+	mkdir crrcsim-win32
+	cp crrcsim.exe crrcsim-win32/
+	$(MINGW)/bin/i686-pc-mingw32-strip crrcsim-win32/crrcsim.exe
+	cp *.air *.rgb *.bw *.tga *.jpg crrcsim-win32/
+	cat crrcsim.cfg | sed 's/$$/\r\l/g' > crrcsim-win32/crrcsim.cfg
+	cat LICENSE | sed 's/$$/\r\l/g' > crrcsim-win32/LICENSE
+	cat README | sed 's/$$/\r\l/g' > crrcsim-win32/README
+	cat instructions.txt | sed 's/$$/\r\l/g' > crrcsim-win32/instructions.txt
+	zip -q -r crrcsim-win32.zip crrcsim-win32
+	rm -rf crrcsim-win32
+	

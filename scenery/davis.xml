@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+
+<crrcsimSceneryFile version="3">
+  
+  <!-- Some general information -->
+  <name>Davis Field (model-based)</name>
+  <categories>
+    <category>Field</category>
+  </categories>
+  <description>
+    <en>The CRRC's home base at Davis.</en>
+  </description>
+  <changelog>
+    <change>
+      <date>2006-06-10</date>
+      <author>Jan Reucker (slowhand_47@gmx.de)</author>
+      <en>Adapted format of general information to the scheme used
+          in airplane files.</en>
+    </change>
+    <change>
+      <date>20010-01-07</date>
+      <author>Jan Reucker (slowhand_47@gmx.de)</author>
+      <en>Changed from x/y/z to north/east/height coordinates.</en>
+    </change>
+  </changelog>
+  
+  <!-- Player position. You may specify multiple <position>s. -->
+  <views>
+    <position name="default" north="0" east ="0" height="6"  />
+  </views>
+  
+  <!-- Starting position for the model. -->
+  <start>
+    <position name="field" north="-20" east="30"  />
+    <position name="parking" north="45" east="70"  />
+    <position name="freqboard" north="30" east="15"  />
+  </start>
+
+  <!-- Default settings -->
+  <default>
+    <wind velocity="3" direction="180" />
+  </default>
+  <preview filename="textures/davis_preview.jpg" />
+
+  <!-- A sky dome, original style -->
+  <!--<sky type="original" texture="textures/clouds.bw" radius="10000" />-->
+  
+  <!-- A sky box. -->
+  <sky type="box" size="5.0">
+    <textures>
+      <north filename="textures/skybox_n.rgb" />
+      <south filename="textures/skybox_s.rgb" />
+      <west  filename="textures/skybox_w.rgb" />
+      <east  filename="textures/skybox_e.rgb" />
+      <up    filename="textures/skybox_u.rgb" />
+      <down  filename="" />
+    </textures>
+  </sky>
+
+
+  <!-- Scenery graphics. -->
+  <scene type="model-based">
+    <object filename="davis.ac" terrain="1">
+      <instance north="0" east="0" height="0" h="180.0" />
+    </object>
+    <object filename="outhouse.ac">
+      <instance north="35" east="35" height="0.0" h="180.0" />
+    </object>
+    <object filename="freqboard.ac">
+      <instance north="33.0" east="17.0" height="0" h="180.0" />
+    </object>
+    <object filename="trashcan.ac">
+      <instance north="40.0" east="23.0" height="0.0" h="180.0" />
+    </object>
+    <object filename="log.ac">
+      <instance north="50.5" height="0.0" east="157" h="180.0" p="0.0" r="0" />
+      <instance north="50.5" height="0.0" east="120" h="180.0" p="0.0" r="0.0" />
+      <instance north="50.5" height="0.0" east="77" h="180.0" p="0.0" r="0.0" />
+      <instance north="50.5" height="0.0" east="44" h="180.0" p="0.0" r="0.0" />
+      <instance north="50.5" height="0.0" east="5" h="180.0" p="0.0" r="0" />
+      <instance north="50.5" height="0.0" east="-31.0" h="180.0" p="0.0" r="0"  />
+      <instance north="50.5" height="0.0" east="-67.0" h="180.0" p="0.0" r="0" />
+    </object>
+    
+  </scene>
+</crrcsimSceneryFile>
+

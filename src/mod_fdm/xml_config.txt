@@ -1,0 +1,17 @@
+There is a 
+  SimpleXMLTransfer* cfg
+which is passed when creating an FDM. It may be empty. Currently defined
+values are:
+
+-------------------------------------------
+<simulation>
+  <display_mode fUse="0" device="udpserver,127.0.0.1/0.0.0.0,9003"/>
+</simulation>
+-------------------------------------------
+
+Parameters are examples, of course.
+
+Possible future usage: 
+ - force instantiation of a certain FDM (if there are several ones which are able to
+   handle same kind of config file/data).
+   

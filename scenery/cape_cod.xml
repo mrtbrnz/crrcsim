@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+
+<crrcsimSceneryFile version="3">
+  
+  <!-- Some general information -->
+  <name>Cape Cod (model-based)</name>
+  <categories>
+    <category>Slope</category>
+  </categories>
+  <description>
+    <en>
+Wellfleet - Great Island National Seashore Area.
+A cliff facing to the west, ideal for 270 deg wind.
+    </en>
+  </description>
+  <changelog>
+    <change>
+      <date>2006-06-10</date>
+      <author>Jan Reucker (slowhand_47@gmx.de)</author>
+      <en>Adapted format of general information to the scheme used
+          in airplane files.</en>
+    </change>
+    <change>
+      <date>20010-01-07</date>
+      <author>Jan Reucker (slowhand_47@gmx.de)</author>
+      <en>Changed from x/y/z to north/east/height coordinates.</en>
+    </change>
+  </changelog>
+  
+  <!-- Player position. -->
+  <views>
+    <position name="default" north="0" height="6" east="-10" />
+  </views>
+  
+  <!-- Starting position for the model. -->
+  <start>
+    <position name="field" north="-20" east ="-10"  />
+  </start>
+
+ <!-- Default settings -->
+  <default>
+    <wind velocity="14" direction="270" />
+  </default>
+
+ <!-- F3F settings -->
+  <F3F orientation="270" />
+  <!-- Preview -->
+  <preview filename="textures/cape_cod_preview.jpg" />
+  
+  <!-- The sky dome. -->
+  <sky type="original" texture="textures/clouds.bw" radius="8000">
+    <preview filename="textures/cape_cod_preview2.jpg" />
+    <descr_short >
+       <en>Sky of thunderstorm (Dome)</en>
+    </descr_short>
+  </sky>
+ <!-- A sky box. -->
+  <sky type="box" size="10.0">
+    <descr_short >
+       <en>Little cloudy (Box) </en>
+    </descr_short>
+    <textures>
+      <north filename="textures/skybox_n.rgb" />
+      <south filename="textures/skybox_s.rgb" />
+      <west  filename="textures/skybox_w.rgb" />
+      <east  filename="textures/skybox_e.rgb" />
+      <up    filename="textures/skybox_u.rgb" />
+      <down  filename="" />
+    </textures>
+  </sky>
+  <!-- Scenery graphics. -->
+  <scene type="model-based">
+    <!-- Objects shall be scaled in feet (1 OpenGL unit = 1 ft.). -->
+    <object filename="cape_cod.ac" terrain="1">
+      <instance north="0" east="0" height="0" h="270"/>
+    </object>
+
+  </scene>
+
+</crrcsimSceneryFile>
+

@@ -1,0 +1,99 @@
+# This Makefile is intended to be used on a Win32 system
+# with MinGW/MSYS.
+#
+# usage:
+#   make -f Makefile.Win32         for optimized build
+#   make -f Makefile.Win32 debug   for debugging build
+
+include Makefile.common
+
+# Optimization options. Adjust for your system.
+OPT_FLAGS   := -O3  # -march=i686
+DEBUG_FLAGS := -g
+
+CC_MODULE = gcc
+CC  = g++
+C++ = g++
+
+# remove implicit rules
+.SUFFIXES:
+
+CRRC_CFLAGS = -Wall `sdl-config --cflags` \
+              -I/usr/include -I/usr/local/include -I/mingw/include/GL \
+              $(OPT_FLAGS) $(CFLAGS_PLIB)
+
+CRRC_LINKER_FLAGS = -L/usr/lib -L/usr/local/lib -L/mingw/lib $(LFLAGS_PLIB) -mwindows -lmingw32 \
+                    `sdl-config --libs` \
+                    -lglu32 -lopengl32 -lportaudio -lwinmm -lwsock32
+                    
+
+all: crrcsim
+
+out/out.created:
+	@echo "--- Creating output directories"
+	@mkdir -p $(SUBDIRS_S)
+	@touch out/out.created
+
+out/crrcsim_private.res:
+	@echo "--- Compiling resources"
+	@echo "A ICON MOVEABLE PURE LOADONCALL DISCARDABLE \"packages/icons/crrcsim.ico\"" | windres.exe --input-format=rc -o out/crrcsim_private.res -O coff
+
+clean:
+	rm -f ${CRRC_OBJECTS_S} ${CRRC_DEPS_S} out/out.created *~ crrcsim_private.rc
+	-rmdir -p $(SUBDIRS_S)
+
+ifneq ($(MAKECMDGOALS),clean)
+include $(CRRC_DEPS_S)
+endif
+
+crrcsim: CRRC_CFLAGS := ${OPT_FLAGS} ${CRRC_CFLAGS}
+crrcsim: ${CRRC_OBJECTS_S} out/crrcsim_private.res
+	@echo "--- Linking"
+	@$(CC) -o crrcsim ${CRRC_OBJECTS_S} out/crrcsim_private.res ${CRRC_LINKER_FLAGS}
+
+debug: CRRC_CFLAGS := ${DEBUG_FLAGS} ${CRRC_CFLAGS}
+debug: ${CRRC_OBJECTS_S} out/crrcsim_private.res
+	@echo "--- Linking (debugging enabled)"
+	@$(CC) -o crrcsim ${CRRC_OBJECTS_S} out/crrcsim_private.res ${CRRC_LINKER_FLAGS}
+
+out/%.o: %.c
+	@echo "--- Compiling $<"
+	@$(CC) $< -o $@ -c ${CRRC_CFLAGS}
+
+out/%.o: %.cpp
+	@echo "--- Compiling $<"
+	@$(C++) $< -o $@ -c ${CRRC_CFLAGS}
+
+out/%.d: %.cpp out/out.created
+	@echo --- Deps: $<
+	@$(CC) ${CRRC_CFLAGS} -MM $< > $@.$$$$; \
+	sed 's,\($(notdir $*)\)\.o[ :]*,$(basename $@).o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+               
+out/%.d: %.c out/out.created
+	@echo --- Deps: $<
+	@$(CC) -MM $< > $@.$$$$; \
+	sed 's,\($(notdir $*)\)\.o[ :]*,$(basename $@).o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+
+mrproper:
+	rm -f ${CRRC_OBJECTS_S} *~ crrcsim crrcsim.exe rctran
+
+codingstyle_indent:
+	@echo "forcing coding style"
+	@indent $(INDENT_CFG) $(CRRC_HEADERS)
+	@indent $(INDENT_CFG) $(CRRC_SRC_CPP)
+	@indent $(INDENT_CFG) $(CRRC_SRC_C)
+
+codingstyle_astyle:
+	@echo "forcing coding style"
+	@astyle $(ASTYLE_CFG) $(CRRC_HEADERS)
+	@astyle $(ASTYLE_CFG) $(CRRC_SRC_CPP)
+	@astyle $(ASTYLE_CFG) $(CRRC_SRC_C)
+
+package: crrcsim
+	@echo "--- Creating Nullsoft installer package"
+	strip --strip-all crrcsim.exe
+	cp packages/Win32/crrcsim.nsi .
+	makensis crrcsim.nsi
+	rm -f crrcsim.nsi

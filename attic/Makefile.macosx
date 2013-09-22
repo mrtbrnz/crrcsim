@@ -1,0 +1,44 @@
+include Makefile.common
+
+# Optimization options. Adjust for your system.
+OPT_FLAGS := # -march=i686
+
+all: crrcsim
+
+CC  = g++
+C++ = g++
+
+# remove implicit rules
+.SUFFIXES:
+
+
+CRRC_CFLAGS = -Wall -O3 `sdl-config --cflags` $(OPT_FLAGS) $(CFLAGS_PLIB)
+
+CRRC_LINKER_FLAGS = -lm -framework OpenGL -framework GLUT \
+                    `sdl-config --libs` $(LFLAGS_PLIB)
+
+crrcsim: ${CRRC_OBJECTS}
+	$(CC) -o crrcsim ${CRRC_OBJECTS} ${CRRC_LINKER_FLAGS}
+	
+%.o: %.c $(CRRC_HEADERS) Makefile
+	$(CC) $< -o $@ -c ${CRRC_CFLAGS}
+
+%.o: %.cpp $(CRRC_HEADERS) Makefile
+	$(C++) $< -o $@ -c ${CRRC_CFLAGS}
+
+clean:
+	rm -f *.o
+	rm -f interface_serial2/*.o interface_serial2/*~
+	rm -f interface_mnav/*.o interface_mnav/*~
+mrproper:
+	rm -f *.o crrcsim crrcsim.exe rctran
+
+package: crrcsim
+	mkdir crrcsim-macosx
+	cp crrcsim crrcsim.cfg crrcsim-macosx/
+	strip crrcsim-macosx/crrcsim
+	cp *.air *.rgb *.bw *.tga *.jpg crrcsim-macosx/
+	cp LICENSE README instructions.txt crrcsim-macosx/
+	tar zcf crrcsim-macosx.tgz crrcsim-macosx
+	rm -rf crrcsim-macosx
+

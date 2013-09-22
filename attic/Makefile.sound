@@ -1,0 +1,20 @@
+
+all: crrc_sound
+
+CPP = g++
+
+OBJECTS = crrc_soundserver.o SimpleXMLTransfer.o lib_conversions.o
+HEADERS = crrc_soundserver.h SimpleXMLTransfer.h lib_conversions.h
+
+CFLAGS = -Wall -g -Dlinux -DSTANDALONE_SOUND_TEST `sdl-config --cflags` -I./glut-3.7/include
+
+LFLAGS = -lm `sdl-config --libs`
+
+crrc_sound: ${OBJECTS}
+	$(CPP) -o crrc_sound ${OBJECTS} ${LFLAGS}
+	
+.cpp.o: Makefile.sound ${HEADERS}
+	$(CPP) $< -o $@ -c ${CFLAGS}
+
+clean:
+	rm -f ${OBJECTS}

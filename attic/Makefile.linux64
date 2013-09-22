@@ -1,0 +1,95 @@
+include Makefile.common
+
+# Optimization options. Adjust for your system.
+OPT_FLAGS := # -march=i686
+DEBUG_FLAGS := -g
+
+CC  = g++
+C++ = g++
+
+# remove implicit rules
+.SUFFIXES:
+
+CRRC_CFLAGS = -Wall -O3 -Dlinux `sdl-config --cflags` -I./glut-3.7/include \
+              $(OPT_FLAGS) $(CFLAGS_PLIB)
+
+CRRC_LINKER_FLAGS = -lm -lGL -lGLU -lXi -lXt -lXmu -lXext \
+                    -L/usr/lib64 -L/usr/X11R6/lib64 `sdl-config --libs` \
+                    $(LFLAGS_PLIB)
+
+# If you are not using portaudio for the audio interface, remove
+# this and edit crrc_config.h accordingly
+CRRC_LINKER_FLAGS += -lportaudio
+
+RCTRAN_CFLAGS = -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer \
+                -fno-strength-reduce -D__RT__ -D__KERNEL__ -DMODULE -c
+
+all: crrcsim
+
+out/out.created:
+	@echo "--- Creating output directories"
+	@mkdir -p $(SUBDIRS_S)
+	@touch out/out.created
+
+clean:
+	rm -f ${CRRC_OBJECTS_S} ${CRRC_DEPS_S} out/out.created *~
+	-rmdir -p $(SUBDIRS_S)
+
+include $(CRRC_DEPS_S)
+
+crrcsim: CRRC_CFLAGS := ${OPT_FLAGS} ${CRRC_CFLAGS}
+crrcsim: ${CRRC_OBJECTS_S}
+	@echo "--- Linking"
+	@$(CC) -o crrcsim ${CRRC_OBJECTS_S} ${CRRC_LINKER_FLAGS}
+
+debug: CRRC_CFLAGS := ${DEBUG_FLAGS} ${CRRC_CFLAGS}
+debug: ${CRRC_OBJECTS_S}
+	@echo "--- Linking (debugging enabled)"
+	@$(CC) -o crrcsim ${CRRC_OBJECTS_S} ${CRRC_LINKER_FLAGS}
+
+out/%.o: %.c
+	@echo "--- Compiling $<"
+	@$(CC) $< -o $@ -c ${CRRC_CFLAGS}
+
+out/%.o: %.cpp
+	@echo "--- Compiling $<"
+	@$(C++) $< -o $@ -c ${CRRC_CFLAGS}
+
+out/%.d: %.cpp out/out.created
+	@echo --- Deps: $<
+	@$(CC) -MM $< > $@.$$$$; \
+	sed 's,\($(notdir $*)\)\.o[ :]*,$(basename $@).o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+               
+out/%.d: %.c out/out.created
+	@echo --- Deps: $<
+	@$(CC) -MM $< > $@.$$$$; \
+	sed 's,\($(notdir $*)\)\.o[ :]*,$(basename $@).o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+               
+rctran: rctran.c mbuff.h
+	$(CC) -o rctran rctran.c ${RCTRAN_CFLAGS} -I/lib/modules/`uname -r`/build/include
+
+mrproper:
+	rm -f ${CRRC_OBJECTS_S} *~ crrcsim crrcsim.exe rctran
+
+package: crrcsim
+	mkdir crrcsim-linux
+	cp crrcsim crrcsim.cfg crrcsim-linux/
+	cp *.air *.rgb *.bw *.tga *.jpg crrcsim-linux/
+	cp LICENSE README instructions.txt crrcsim-linux/
+	tar zcfvv crrcsim-linux.tgz crrcsim-linux
+	rm -rf crrcsim-linux
+
+codingstyle_indent:
+	@echo "forcing coding style"
+	@indent $(INDENT_CFG) $(CRRC_HEADERS)
+	@indent $(INDENT_CFG) $(CRRC_SRC_CPP)
+	@indent $(INDENT_CFG) $(CRRC_SRC_C)
+
+codingstyle_astyle:
+	@echo "forcing coding style"
+	@astyle $(ASTYLE_CFG) $(CRRC_HEADERS)
+	@astyle $(ASTYLE_CFG) $(CRRC_SRC_CPP)
+	@astyle $(ASTYLE_CFG) $(CRRC_SRC_C)
+

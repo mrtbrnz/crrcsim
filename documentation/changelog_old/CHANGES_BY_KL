@@ -1,0 +1,121 @@
+KL, Aug 29, 2004 :
+==================
+
+- Fixed some small things (e.g. uniform use of in/de crease_throttle, also in
+  crrc_keyboard.c and the reset of joystick axis/buttons in crrc_main main() ).
+- Added very simple sound support using SDL_audio and SDL_thread.
+
+KL, July 24, 2004 :
+===================
+
+- Reworked the zoomfunctions : we now have zoomin(), zoomout() and
+  set_zoom() to avoid reduncancy for joystick, keyboard and mouse zoom.
+
+- Increaded the maximum number of joystick buttons to 6 and added the
+  possibility of binding joystick zooming to the config file.
+  
+- Made a more clever mechanism for parsing the joystick axes and button
+  options as the previous mechanism was unmanageable for larger numbers
+  of buttons/axes (crrc_parse_config.c).
+
+KL, July 21, 2004 :
+===================
+
+- Fixed a typo in keyboard rudder control (swapped left and right).
+
+KL, July 18, 2004 :
+===================
+
+- Added some joystick options to the cmdline
+- Repainted the very yellow spirit.air (spirit-color.air)
+
+KL, July 17, 2004 :
+===================
+
+CODE cleanup :
+
+- Made crrc_parse-config.c into a real separate object. Had to add a lot of
+  external variables to crrc_main.h to make this work.
+
+- Moved key_down() routine to separate object crrc_keyboard.c . crrc_main.c
+  is already loosing some fat now ;)
+
+- Added "default" option to switch() inside key_down() to stop compiler
+  warnings about SDL enumerators when using the option -Wall
+
+- Adapted Makefile for Linux to have compiler flag "-Wall". This produces a lot
+  more warnings during compilation but shows much better where the weak points
+  are. Of course in the future the code should also compile without any
+  warnings with the -Wall option turned on ;)
+
+KL, July 16, 2004 :
+===================
+
+EXTENSIONS and CODE cleanup :
+
+- Extended the number of commandline options with some more useful variables
+
+- Created a separate crrc_main.h by removing all defines, includes and
+  typedefs from crrc_main.c
+
+- Renamed crrc_parse_config.h to crrc_parse_config.c as it is NOT a header
+  file but contains source code ! For the time being still included in
+  crrc_main.c but should be made into a separate object later
+
+- Adapted the Makefiles to remove crrc_parse_config from the HEADER files
+
+KL 0.8.4 :
+==========
+
+- Added wind_velocity option (-w)
+- Added aileron control using keyboard (F11 / F12) 
+- Moved throttle to PG/UP DOWN (like in FlightGear)
+- Moved elevator keyboard control to CRSR UP/DOWN
+- Streamlined glut-3.7/gle and added simple Makefile
+
+KL 0.8.3 :
+==========
+
+- Added commandline options for airfield, input (mouse or keyboard) and
+  fullscreen in a new source crrc_checkopts.c
+
+KL 0.8.2 :
+==========
+
+- Added Gle and Glut to the package to make compilation a little easier
+- Removed #include glutil.h in crrc_main.c
+- Fixed some small compilation warnings in 2 headerfiles (#endif)
+- Added precompiled crrcsim binary and precompiled libgle.a
+- Changed the Makefile :
+  - Use GLE and GLUT headers from the package
+  - Compile each object file individually to speedup compilation after
+    small modifications
+  - make clean doesn't remove the binary anymore (but make veryclean does)
+  NOTE : it now uses some Gnu Make tricks which should work on all Gnu make
+         based systems (but maybe not on standard MS-Windows ?) If not just 
+	 change CRRC_OBJECTS and list them manually ;)
+- Enabled cmdline option parser and help in ls_interface.c and main()
+- Changed read_airplane_file() to be able to get plane from cmdline again
+- Added keyboard control for the elevator in special() KEY_PGUP / KEY_PGDOWN)
+- Added a "reset to decent values" from keyboard (KEY_HOME)
+- Currently the binary prints the rudder position, throttle and other values
+  in the console as soon as they are changed from the keyboard 
+- Changed introduction.txt to document new keyboard controls
+- Changed the default crrsim.cfg to start at DAVIS and without any wind 
+  (which is much easier for beginners like me ;)
+- Made the default.air plane a softlink to the real one
+
+TODO :
+
+- improve commandline options : choose plane, airport and control
+- add menubar with some menus to change plane, airport etc. "on the fly"
+- change keyboard rudder and elevator control to return to neutral (or trim)
+  position automatically if key is released (like in most other Sims)
+- Add an optional live indicator that shows the current value of thrust,
+  elevator and rudder somewhere on the screen
+- add sound !
+
+DONE :
+x move defines from crrc_main.c to new crrc_main.h and include this in
+  crrc_checkopts.c
+

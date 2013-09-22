@@ -1,0 +1,285 @@
+AC3Db
+MATERIAL "default" rgb 1.0 1.0 1.0  amb 0.4 0.4 0.4  emis 0 0 0  spec 0 0 0  shi 5  trans 0
+OBJECT world
+kids 14
+OBJECT poly
+name "parking_lot"
+texture "dirt.rgb"
+numvert 4
+-100.0 -0.1 -50.0
+200.0 -0.1 -50.0
+200.0 -0.1 -250.0
+-100.0 -0.1 -250.0
+numsurf 1
+SURF 0x20
+mat 0
+refs 4
+0 -1.25 -0.625
+1 2.5 -0.625
+2 2.6 -3.125
+3 -1.25 -3.125
+kids 0
+OBJECT poly
+name "field"
+texture "grass_1.rgb"
+numvert 4
+-100.0 -0.1 1000.0
+400.0 -0.1 1000.0
+275.0 -0.1 -50.0
+-100.0 -0.1 -50.0
+numsurf 1
+SURF 0x20
+mat 0
+refs 4
+0 -12.5 125.0
+1 50 125
+2 34.375 -6.25
+3 -12.5 -6.25
+kids 0
+OBJECT poly
+name "eastern_view_1"
+texture "eastern_view.rgb"
+numvert 4
+6000.0 -20 -900
+6000 -250 5700
+6000 175 5700
+6000 405 -900
+numsurf 1
+SURF 0x20
+mat 0
+refs 4
+0 0 0
+1 0.98 0
+2 0.98 0.98
+3 0 0.98
+kids 0
+OBJECT poly
+name "eastern_view_2"
+texture "eastern_view.rgb"
+numvert 4
+-6000 -60 -4700
+-6000 -40 1900
+-6000 405 1900
+-6000 385 -4700
+numsurf 1
+SURF 0x20
+mat 0
+refs 4
+0 0 0
+1 0.98 0
+2 0.98 0.98
+3 0 0.98
+kids 0
+OBJECT poly
+name "eastern_view_3"
+texture "eastern_view.rgb"
+numvert 4
+-6000 -40 1900
+0 -40 -6000
+0 405 -6000
+-6000 385 1900
+numsurf 1
+SURF 0x20
+mat 0
+refs 4
+0 0 0
+1 0.98 0
+2 0.98 0.98
+3 0 0.98
+kids 0
+OBJECT poly
+name "eastern_view_4"
+texture "eastern_view.rgb"
+numvert 4
+6000 -20 -900
+0 -40 -6000
+0 405 -6000
+6000 405 -900
+numsurf 1
+SURF 0x20
+mat 0
+refs 4
+0 0 0
+1 0.98 0
+2 0.98 0.98
+3 0 0.98
+kids 0
+OBJECT poly
+name "netrees_1"
+texture "netrees.rgb"
+numvert 4
+400 -10 0
+300 -10 -200
+300 95 -200
+400 95 0
+numsurf 1
+SURF 0x20
+mat 0
+refs 4
+0 0.98 0
+1 0 0
+2 0 0.98
+3 0.98 0.98
+kids 0
+OBJECT poly
+name "netrees_2"
+texture "netrees.rgb"
+numvert 4
+-400 0 -350
+-250 0 -550
+-250 85 -550
+-400 85 -350
+numsurf 1
+SURF 0x20
+mat 0
+refs 4
+0 0.98 0
+1 0 0
+2 0 0.98
+3 0.98 0.98
+kids 0
+OBJECT poly
+name "pines"
+texture "pinetrees.rgb"
+numvert 6
+-700 -2 1000
+-700 90 1000
+550 90 1000
+550 -2 1000
+1000 40 950
+1000 -42 950
+numsurf 2
+SURF 0x20
+mat 0
+refs 4
+0 -7 0
+1 -7 0.99
+2 5.5 0.99
+3 5.5 0
+SURF 0x20
+mat 0
+refs 4
+3 5.5 0
+2 5.5 0.99
+4 10 0.99
+5 10 0
+kids 0
+OBJECT poly
+name "decidous_trees"
+texture "decid.rgb"
+numvert 4
+-200 -0.1 50
+-200 40 50
+-200 40 300
+-200 -0.1 300
+numsurf 1
+SURF 0x20
+mat 0
+refs 4
+0 0.01 0.01
+1 0.01 0.99
+2 0.99 0.99
+3 0.99 0.01
+kids 0
+OBJECT poly
+name "field_side"
+texture "grass_side.rgb"
+numvert 4
+-100 -0.1 -150
+-100 2 -150
+-100 2 1000
+-100 -0.1 1000
+numsurf 1
+SURF 0x20
+mat 0
+refs 4
+0 131.25 0.99
+1 131.25 0
+2 0 0
+3 0 0.99
+kids 0
+OBJECT poly
+name "field_top"
+texture "grass_top.rgb"
+numvert 4
+-100 2 -150
+-300 2 -150
+-300 2 1000
+-100 2 1000
+numsurf 1
+SURF 0x20
+mat 0
+refs 4
+0 -10 -5
+1 -30 -5
+2 -30 100
+3 -10 100
+kids 0
+OBJECT poly
+name "bushes"
+texture "decid.rgb"
+numvert 16
+-105 -0.2 -250
+-27.5 -0.2 -250
+-27.5 7 -250
+-105 7 -250
+0 -0.2 -250
+215 -0.2 -250
+215 10 -250
+0 10 -250
+-99.9 -0.2 -145
+-99.9 -0.2 -250
+-99.9 5 -250
+-99.9 5 -145
+200 -0.2 -250
+200 -0.2 -100
+200 6 -100
+200 10 -250
+numsurf 4
+SURF 0x20
+mat 0
+refs 4
+0 0.01 0.01
+1 0.99 0.01
+2 0.99 0.99
+3 0.01 0.99
+SURF 0x20
+mat 0
+refs 4
+4 0.01 0.01
+5 0.99 0.01
+6 0.99 0.99
+7 0.01 0.99
+SURF 0x20
+mat 0
+refs 4
+8 0.01 0.01
+9 0.99 0.01
+10 0.99 0.99
+11 0.01 0.99
+SURF 0x20
+mat 0
+refs 4
+12 0.01 0.01
+13 0.99 0.01
+14 0.99 0.99
+15 0.01 0.99
+kids 0
+OBJECT poly
+name "bushes_grass"
+texture "grass_side.rgb"
+numvert 4
+275 -0.1 -50
+400 -0.1 1000
+400 3 1000
+275 3 -50
+numsurf 1
+SURF 0x20
+mat 0
+refs 4
+0 0 0.99
+1 88 0.99
+2 88 0
+3 0 0
+kids 0
+

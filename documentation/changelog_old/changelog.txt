@@ -1,0 +1,826 @@
+2007-12-08 Martin Herrmann
+  * added Zhen Hua (Walkera Dragonfly) support
+
+2005-05-15 Jens Wilhelm Wulf
+
+  * no engine sound with (max_thrust = 0)
+
+2005-05-15 Jens Wilhelm Wulf
+
+  * quick hack to show path of .air file to load
+
+2005-05-15 Jens Wilhelm Wulf
+
+  * bugfix: variometer volume from config file
+  * default engine sound, search path
+
+2005-04-27 Jens Wilhelm Wulf
+
+  * bugfix: initial velocity was only correct for one wind direction
+
+2005-04-13 Jens Wilhelm Wulf
+
+  * bugfix: zip60.air did not provide a 'rotate' section for its fin,
+    therefore its appearance was random. Now the code sets default values.
+    todo: .air-file parsing should be made less picky...
+
+2005-04-13 Jens Wilhelm Wulf
+
+  * bugfix: segfault when chosing RCTRAN2 (no mixer had been created in
+    T_TX_Interface_RCTran2::init()).
+  * Updated rctran2, which can also emulate a joystick device now (submitted
+    by Benko Attila).
+  * Slightly changed rctran2 to allow for a broader range of interface
+    circuits.
+  * Updated documentation for rctran2 (additional circuit description,
+    experiences, ...)
+ 
+2005-04-08 Jens Wilhelm Wulf
+
+  * bugfix: possible overflow leading to SIGSEV in engine sound.
+ 
+2005-04-04 Jens Wilhelm Wulf
+
+  * bugfix 1176549 from bug tracking system
+ 
+2005-04-04 Jens Wilhelm Wulf
+ 
+  * Makefile, Makefile.linux, Makefile.linux64:
+    -dependencies now do work for files in subdirectories
+    -output is put into subdirectory out
+  
+2005-04-03 Jens Wilhelm Wulf
+
+  * crrc_sound: integer arithmetic, some fiddling around...
+  
+2005-04-03 Jens Wilhelm Wulf
+
+  * GUI for audio settings
+  * crrc_sound is .cpp now
+  * engine sound has three modes (a new one for electrically 
+    powered planes): off, on (only when throttle > 0), always on.
+
+2005-04-03 Jens Wilhelm Wulf
+
+  * Some makefiles modified to automatically create and use dependencies.
+  * made test mode work again
+  * sound output: it is possible to use any sample rate for output (while the
+    engine sound itself has fixed pitch). Length of buffer is adjusted
+    automatically.
+  * old variometer removed
+  * new variometer (using wave output, adjustable volume).
+  * todo: GUI configuration for new engine and variometer sound
+
+2005-04-02 Jens Wilhelm Wulf
+
+  * Hopefully correct signed/unsigned problem in SimpleXMLTransfer
+
+2005-04-02  Jan Reucker (slowhand_47)
+
+  * audio_interface/tx_audio.cpp: Bugfix: axes were mixed twice
+  * tx_interfacePPM.cpp, interface_rctran/tx_rctran.cpp,
+    interface_serpic/tx_interface_serpic.cpp: Bugfix: unmapped axes
+    could lead to an array indexing problem
+  * tx_interface.cpp, tx_interface.h: Corrected problem with the
+    Windows build: "interface" seems to be a reserved word for
+    MinGW32.
+  * crrcsim.dev: added new files
+
+2005-03-30  Jan Reucker (slowhand_47)
+
+  * interface_software/: tx_software.cpp, tx_software.h: Rewrote
+    parts of the interface to make it use more of the general
+    interface stuff.
+  * interface_rctran/tx_rctran.cpp, interface_rctran/tx_rctran.h,
+    interface_rctran2/tx_rctran2.cpp, interface_rctran2/tx_rctran2.h:
+    Adapted to changes in base class.
+  * interface_parallel/: parallel.cpp, parallel.h: Adapted to changes
+    in InterfacePPM.
+  * audio_interface/: tx_audio.cpp, tx_audio.h: Adapted to changes in
+    InterfacePPM and TX_Mixer
+  * GUI/: crrc_scaleinput.cpp, crrc_scaleinput.h: Removed scale and
+    offset from the dialog. Will now be handled by crrc_calibmap
+    dialog.
+  * GUI/: crrc_gui_main.cpp, crrc_gui_main.h: Cleaned up the Options
+    menu. Added a GUI_idle() function which is called while the GUI
+    is active.
+  * GUI/: crrc_dialog.h, crrc_dialog.cpp: Added a hook for a periodic
+    update() function (will be called each frame instead of the
+    flight model's idle() function when the GUI is visible). Added
+    methods to lock and unlock a dialog (grey out OK and Cancel
+    buttons)
+  * GUI/: crrc_ctrlgen.cpp, crrc_ctrlgen.h: Extended the dialog. It
+    is now the central dialog for all control related stuff.
+  * GUI/: crrc_calibmap.cpp, crrc_calibmap.h: Initial commit: new
+    unified dialog for calibration and axis mapping.
+  * tx_interfacePPM.cpp, tx_interfacePPM.h: Added new method to query
+    the name of an interface type implemented by a subclass. PPM base
+    class now makes use of the new calibration and mapping classes
+    which automatically makes this work in all subclasses, too.
+  * tx_interface.h, tx_interface.cpp: Added new generic classes for
+    calibration and mapping. Removed calibration stuff from mixer
+    class. Extended the T_TX_Interface class with some generic hooks
+    which may be implemented by the subclasses.
+  * SimpleXMLTransfer.cpp: Fixed a signed/unsigned issue
+  * mouse_kbd.cpp, mouse_kbd.h: Removed axis assignment stuff (is now
+    handled by T_AxisMapper), added methods to query the number of
+    joystick axes and buttons
+  * Makefile.common: Added new files (calibration dialog, serpic
+    interface), removed mouse axis dialog file
+  * Makefile, Makefile.linux: Activated audio interface as default
+  * defines.h: Added macro NUM_AXISFUNCS
+  * interface_serpic/: tx_interface_serpic.cpp,
+    tx_interface_serpic.h: Initial commit: added new interface class
+    to support serial FMS-PIC-interfaces
+  * crrc_main.cpp, crrc_main.h: - made sim inputs global to allow
+    external resetting - idle() function is now called by a function
+    pointer. By	modifying this pointer, other functions may be
+    called   for each frame (test mode, GUI update).  - simplified
+    mouse and joystick handling
+  * crrc_keyboard.cpp: Switching to test mode is only possible if GUI
+    is not visible, added new routine to re-center the keyboard input
+
+2005-03-15 21:36  lcailler
+
+  * crrc_config.h: unable audio interface : COMPILE_AUDIO_INTERFACE 1
+  * tx_interfacePPM.cpp: correction of throttle acquisition bug
+
+2005-03-14 21:06  oborf3f
+
+  * CTime.cpp, Makefile.common, crrc_main.cpp: Added CPU cycles
+    computing to avoid 100% CPU use when running
+  * CTime.h: Added CTime class for CPU cycles computing
+
+2005-03-12 22:18  joellienard
+
+  * tx_interfacePPM.cpp: tx test mode and oscillo for audio-interface
+
+2005-02-27 22:24  lcailler
+
+  * models/arkanj-mg11.air: New airplane: arkanj (symetric) imported
+    from http://fr.groups.yahoo.com/group/aeromod-models/files/ .
+    Model based on arkanj http://perso.wanadoo.fr/aeromod.concept/
+
+2005-02-26 Jan Reucker (slowhand_47)
+
+  * interface_software/: tx_software.cpp, tx_software.h: Moved mixer
+    stuff to a generic mixer class.
+  * audio_interface/: tx_audio.cpp, tx_audio.h: Enabled software
+    mixer for audio interface.
+  * GUI/: crrc_scaleinput.cpp, crrc_scaleinput.h: Dialog is now
+    available to all derivatives of TX_Interface.
+  * GUI/crrc_gui_main.cpp: "Scale input" dialog is now available for
+    all interfaces which are using the software mixer class.
+  * tx_interface.cpp, tx_interface.h: Added a generic software mixer
+    class.
+  * crrc_inputs.h: Added documentation.
+
+2005-02-24 23:33  oborf3f
+
+  * SimpleXMLTransfer.cpp: fix "unsigned int pos" to "int pos" to
+    work correctly in 64 bits.
+
+2005-02-20 11:50  Jan Reucker (slowhand_47)
+
+  * documentation/ReleaseNotes: Added test mode to the release notes.
+
+2005-02-19 Jens Wilhelm Wulf
+
+  * Small fixes to make it compile without audio interface and 
+    make test_mode work with mouse input.    
+
+2005-02-18 Jens Wilhelm Wulf
+
+  * Removed 'free' after 'getenv'. Jan and me agreed that it isn't
+    necessary.
+
+2005-02-16 Jens Wilhelm Wulf
+
+  * Values returned by interface_rctran2 are in the range -0.5..0.5
+    (throttle: 0..1) now.
+
+2005-02-13 Jan Reucker (slowhand_47)
+
+  * documentation/ReleaseNotes: Release notes for 0.9.2
+  * documentation/: Install_Linux.txt, install.txt: The "old"
+    install.txt file.
+  * documentation/README_old: The "old" README file.
+  * documentation/Install_Win32.txt: Added installation instructions
+    for Win32.
+  * documentation/README: Rewrote the README to contain more generic
+    information about CRRCSim.
+
+2005-02-12 Jan Reucker (slowhand_47)
+
+  * crrc_sound.c: Corrected a possible div-by-zero which could lead
+    to a segfault.
+  * GUI/crrc_gui_main.cpp: Sound thread will be stopped when entering
+    the GUI.
+  * crrcsim.nsi: Simplified the installer and corrected some glitches
+
+2005-02-11 Jens Wilhelm Wulf
+
+  * Patched interface_rctran2 according to email by Benkö Attila.
+
+2005-02-11 Jan Reucker (slowhand_47)
+
+  * crrc_sound.c, crrc_sound.h: Reworked the sound routines: added
+    resampling to support sound pitch changes without having to stop
+    the sound, added some basic 3D audio calculations (Doppler
+    effect, distance-dependend volume).
+  * crrc_main.cpp: Added call for 3D sound update.
+
+2005-02-06 Lionel Cailler (lcailler)
+
+  * audio_interface/audio_rc.h: add #ifdef __cplusplus to prevent
+    name mangling between symbols defined in header files, but used
+    in c and c++ source files
+  * audio_interface/audio_rc.c: Update of initialization phase : add
+    a check of an available audio input device before using it.
+    Permits automatic detection of computer configurations without
+    audio input device.
+  * models/tug.air: New airplane: tug, made by Philippe Mario Romano
+
+2005-02-06 Jens Wilhelm Wulf
+
+  * Removed variometer beep on windows, as it is synchronous (blocking).
+
+2005-02-05 Jens Wilhelm Wulf
+
+  * Variometer might beep on windows now.
+
+2005-02-05 Jens Wilhelm Wulf
+
+  * Thermal display not that dark anymore
+
+2005-02-05 Jan Reucker (slowhand_47)
+
+  * GUI/crrc_gui_main.cpp: Corrected bug with toggle fullscreen on
+    non-Linux-platforms
+  * crrcsim.ico: Colors were messed up again, although file type is
+    set to binary. Strange.
+  * crrcsim.dev: Added library libdlportio.a
+  * crrc_main.cpp: Enabled key repeating.
+  * crrc_main.cpp: Disabled depth test and dynamic lighting for
+    thermal drawing.
+
+2005-02-01 Jan Reucker (slowhand_47)
+
+  * Changed file type (text --> binary).
+  * crrcsim.dev: Reenabled parallel interface for Win32.
+  * interface_parallel/parallel.cpp: Reenabled parallel interface for
+    Win32. Instead of including dlportio.h I've specified the needed
+    prototypes directly in this file, because dlportio.h wouldn't
+    work without heavy modifications.
+  * crrc_main.cpp: Reenabled parallel interface for Win32.
+  * documentation/compile.txt: Added instructions for dlportio.dll.
+
+2005-01-31 Lionel Cailler (lcailler)
+
+  * default_model_routines.h: add  #ifdef __cplusplus to solve name
+    mangling problem between ls_model.c and
+    crrc_aero.cpp/crrc_engine.cpp/crrc_gear.cpp/default_model_routines.cpp
+  * crrc_engine.cpp, crrc_aero.cpp: add  : #include
+    "default_model_routines.h" It avoids linker errors "undefined
+    symbols : aero engine"
+
+2005-01-30 14:40 Jan Reucker (slowhand_47)
+
+  * GUI/: crrc_gui_main.cpp, crrc_gui_main.h: Added save-on-exit
+    dialog box.
+  * GUI/: crrc_msgbox.cpp, crrc_msgbox.h: Added handling for query
+    boxes (giving the user the choice between two options).
+  * GUI/: crrc_dialog.cpp, crrc_dialog.h: Added methods to change the
+    button legends.
+  * crrc_main_cpp.h: Prototype for crrc_exit().
+  * crrc_main.h: Prototype for quit_sim().
+  * crrc_main.cpp: New exit() handling through GUI and crrc_exit().
+  * crrc_keyboard.cpp: Key "q" now uses the exit dialog if the config
+    has changed.
+  * crrc_checkopts.cpp, crrc_scenery.cpp: Use crrc_exit() instead of
+    exit().
+  * ls_init.c, ls_matrix.c: Commented out unused rcsid[], enforced
+    coding style.
+  * crrc_gear.cpp: Commented out unused v_wheel_body_v[] and rcsid[],
+    enforced coding style.
+  * crrc_scenery.cpp, crrc_scenery.h: Added missing dtor for scenery
+    class.
+  * crrc_sky.cpp: Added missing dtor for CSkySphere.
+
+2005-01-27 22:00 Jens Wilhelm Wulf
+
+  * Added methods to SimpleXMLTransfer (compare with another SimpleXMLTransfer)
+  * Added bool options_changed() to module config. It compares the current
+    options to the ones in the config file. It may return 'not equal'
+    although the user has not really changed anything, because something
+    has been a default value before and now really is in the options.
+    Or because some float value had been in the config as "0" before and is
+    now written as "0.00000000e+00". However, such effects can only happen
+    once for each value. Once every (default) value has been written to the
+    file they should not happen anymore.
+
+2005-01-27 21:37  slowhand_47
+
+  * crrc_main.cpp: Commented out RCTRAN2 for Windows build
+  * crrc_main.cpp: Fixed a small bug which initialized windowed mode
+    although the config was set to fullscreen.
+
+2005-01-26 20:11 Jan Reucker (slowhand_47)
+
+  * crrc_main.cpp: Adapted to new video settings dialog.
+  * GUI/: crrc_video.cpp, crrc_video.h: Extended dialog to use it for
+    windowed resolution.
+  * GUI/: crrc_dialog.cpp, crrc_dialog.h: New default widget sizes.
+
+2005-01-25 17:51 Jan Reucker (slowhand_47)
+
+  * Makefile, Makefile.linux: Added target "debug": use "make clean
+    && make debug" to recompile with debugging symbols (instead of
+    editing the Makefile)
+  * models/Skorpion.air: New airplane: Skorpion, made by Arthur
+    Frenslich
+
+2005-01-24 21:00 Jens Wilhelm Wulf
+
+  * Added transmitter interface rctran2, which uses the kernel module
+    contributed by Benkö Attila. Added files and documentation.
+
+2005-01-23 20:00 Jens Wilhelm Wulf
+
+  * Installation notes and related make targets for linux.
+  * The aircraft selection dialog displays files of the directories 
+    returned by T_Config::getModelDirs(...), which is operating system
+    dependent. 
+    todo: the dialog does not show paths yet, only filenames!
+
+2005-01-23 13:31 Jan Reucker (slowhand_47)
+
+  * GUI/crrc_location.cpp: ComboBox now shows the current location
+    when the dialog is created. Window title changes with location.
+  * crrcsim.xml: Disabled training mode (shouldn't be ON by default).
+  * crrc_main.h: Commented out PARALLEL interface for WIN32 build.
+  * crrcsim.dev: Project file for the Dev-C++ environment (Windows).
+  * crrc_main.cpp: Commented out RCTRAN and PARALLEL interface for
+    WIN32 build.
+  * crrc_gear.cpp: Added #define NOGDI for WIN32 build.
+  * crrcsim.ico: corrected the icon (colors were messed up)
+
+2005-01-22 11:32 Jan Reucker (slowhand_47)
+
+  * GUI/crrc_gui_main.cpp: Added location dialog.
+  * Makefile.common: Added crrc_location.*
+  * crrc_scenery.cpp: Scenery constructor cares about texture loading
+    and does no longer rely on crrc_main for that task.
+  * crrc_sky.cpp, crrc_sky.h: Sky sphere constructor cares about
+    texture loading and does no longer rely on crrc_main for that
+    task.
+  * crrc_main.cpp, crrc_main.h, crrc_main_cpp.h: Removed lots of
+    texture-loading-stuff from crrc_main.cpp.
+  * GUI/: crrc_location.cpp, crrc_location.h: Dialog for location
+    switching.
+
+2005-01-20 22:15 Jens Wilhelm Wulf
+
+   * Due to the code, there had been a high possibility for two thermals
+     very close to each other (in one part of the grid and its neighbour). 
+     Implemented another method which fixes this.
+   * Implemented a new thermal model, can be selected by editing
+     crrc_config.h. Reasons for doing this and other details can 
+     be found in 'documentation/thermals'. This is work in progress!
+
+2005-01-20 20:15 Jens Wilhelm Wulf
+
+   * Thermals are now recreated according to new settings after 
+     closing GUI dialog.
+   * Using a length of about roughly one half of the aircrafts 
+     size to calculate wind gradients. 0.1 foot had been used before,
+     which leads to very high or zero gradients.
+     The method to determine the size is not perfect, but may be ok.
+     Gradients are determined symmetrically now.
+   * Random number generator is initialized on startup.
+   * Minor optimization of old thermal model.
+
+2005-01-19 19:45 Jens Wilhelm Wulf
+
+   * Bugfix: when switching from window mode to fullscreen without a complete
+     config file, crrcsim aborted. Added default values.
+   * Added zip60.air and zipper.air with permission from birdworks.
+
+2005-01-18 20:30 Jens Wilhelm Wulf
+
+   * some changes regarding rctran
+   * Created include_gl.h as central file which includes necessary gl 
+     headers, as they are quite architecture dependent.
+   * Reworked parts of windfield
+   * moved drawing of thermals to module windfield
+   * New method of drawing thermals (faster and doesn't draw thermals which
+     have no effect)
+   * Increased time constant of filter for frames per second.
+
+2005-01-17 23:50 Jens Wilhelm Wulf
+
+   * Increased diameter of the 'stalling blob', as it had been to hard to 
+     see in some situations.
+   * Thermals show their diameter. It's easy to see whether you're in or not.
+   * Thermals around the aircraft are shown, and not those around
+     the terrains origin.
+   * More code reverse-engineered and documented in windfield.cpp.
+     Made some optimizations.
+   * Excluded the code for the turbulence grid using #if, as it
+     effectively did nothing.
+   * A message is displayed if the aircraft is flying outside of the windfield
+     simulation. But at the same time something else happens, the screens
+     goes black..
+   * Thermal density was said to be in '1/sq mile' before. But everything
+     makes me think it is in '1/sq foot', so I changed labels/comments.
+
+2005-01-17 19:40 Jens Wilhelm Wulf
+
+   * Moved T_Config* cfg from module crrc_main to module config
+   * Moved code related to simulation of windfield to windfield.h/.cpp.
+   * Added a note to the input scaling dialog.
+
+2005-01-17 16:00 Jens Wilhelm Wulf
+
+   * T_Config::getDataPath(const char* item) should be used to load data
+     files if one doesn't know where they really are. On systems other
+     than linux, it currently returns 'item'. On linux, it works.
+     What does that mean on a linux system: put crrcsim and your data files
+     to where you like. The executable may be anywhere (in your path). The
+     data file could be in the working directory, in ~/.crrcsim/, in
+     /usr/local/share/games/crrcsim/ or in /usr/share/games/crrcsim/.
+     The most local file is used.
+     What does that mean on other systems: nothing has changed.
+   * T_Config::getDataPath(...) used to load textures.
+   * T_Config::getSoundfilePath() used for path of sound file. This method
+     uses T_Config::getDataPath(...).
+   * read_bwimage(..) set some values depending on a filename before. Now
+     those values are set before calling the function, which is less prone 
+     to errors. It would be nice if those values could be read frome the file
+     (which is the case with read_rgbimage(..) ).
+   * Added text description to air-files. Using '# 0 # ' as leading character
+     sequence, which enables the old code to load these files without problems.
+   * read_airplane_file returns whether it has been successful. If not, we try
+     to read a fallback. If that one fails, too, crrcsim exits.
+   * Removed models/default.air (same content as models/allegro.air). There
+     is no need to have a file models/default.air. 
+   
+2005-01-16 21:30 Jens Wilhelm Wulf
+
+   * Renamend update_winds to update_thermals, as only those are updated.
+   * Altitude of winch start is 300 ft now
+   * Hopefully fixed labels in joystick config dialog
+
+2005-01-16 10:45 Jan Reucker (slowhand_47)
+
+  * make_package.bat: Packaging batch file for Win32.
+  * crrcsim.ico: Icon for Win32.
+  * documentation/compile.txt: Added instructions for Win32.
+    Corrected DevPak-URLs.
+
+2005-01-15 20:00 Jens Wilhelm Wulf
+
+   * Using make_new_thermal for the initial thermals, too; so now there is
+     only one code for creating thermals.
+   * Corrected unit for lifetime of thermals to seconds.
+   
+2005-01-15 15:48 Jan Reucker (slowhand_47)
+
+  * crrcsim.xpm: Icon 32x32 in xpm format
+  * models/: Skimmer_MK_I.air, k2-f3f.air, melyan_01.air: Added new
+    models from Yahoo! group
+
+2005-01-14 18:30 Jens Wilhelm Wulf
+
+   * New presets for launch/wind/thermal can be created from GUI
+   
+2005-01-14 Jens Wilhelm Wulf
+
+   * documentation/options.txt updated
+   * Dialogs to configure mouse buttons and axes.
+   * Removed linker options.
+   * CGUIMain now uses global TXInterface instead of a local one which one
+     needs to tell it about. Not doing this may have caused segfaults before.
+
+2005-01-13 22:00 Jens Wilhelm Wulf
+
+   * Moved 'SimpleXMLTransfer* cfgfile' from module crrc_main to module
+     config. Now it is also initialized there.
+   * Finding no configuration file isn't a problem anymore. CRRCSim can
+     be run without one.
+   * Support for path to configuration file. This
+     will differ because of configuration and operating system.
+     Started support for path of data directory -- see mailing list.
+   * When reverting to mouse input, this setting is written back to 
+     cfgfile, so it can be saved to the configuration file later.
+   * Dialog for joystick bindings -- should be easy to use, but untested
+     due to lack of hardware.
+   * Prepared code/messages for config dialogs of remaining input methods.
+
+2005-01-12 19:00 Jens Wilhelm Wulf
+
+   * Added a widget crrcSpin, which (in contrast to puaSpinBox) doesn't
+     allow keyboard input and has bigger buttons.
+   * SDL init of joystick subsystem only once.
+   * Why did I name it TMouseKbd? Silly me. Renamed to TInputDev, now
+     also handles zoom_control (previously in zoom.h), joystick init
+     and joystick close (joystick had not been closed before).
+   * Enhanced dialog for basic control settings and added number of joystick
+     to it. Refuses to accept joystick if there is no joystick available.
+
+2005-01-11 22:00 Jens Wilhelm Wulf
+
+   * TMouseKbd writes its configuration back.
+   * Max. relative velocity for launch increased to six -- is that sufficient?
+
+2005-01-11 20:00 Jens Wilhelm Wulf
+
+   * Launch angle and velocity are really working now
+   * Bugfix: reading radio type from config file had been wrong, did
+     always return FUTABA.
+   * GUI dialog for basic control settings (zoom control, input method,
+     radio type).
+
+2005-01-10 20:00 Jens Wilhelm Wulf
+
+   * GUI dialog for wind and thermals, including configurable presets.
+   * Every TXInterface writes its configuration back.
+   * GUI dialogs to change scaling of mouse and joystick input. In this
+     step I also removed some factor (0.01). So all parameters except scale 
+     appear as (old parameter/100).
+
+2005-01-10 00:30 Jens Wilhelm Wulf
+
+   * Options in T_Config, T_Wind and T_Thermal are written back 
+     to configuration file.
+   * Up to now, direction of the wind was not the same in the config file
+     and internally. To make handling this less prone to bugs, I simple
+     made the external direction equal to the internal one.
+   * Simplified T_Config and the like, easier to use now. It is easy
+     to change the parameters it manages using its public interface.
+   * Converted some 'if' in the code to a configuration entry. That saves
+     an if and gives the ability to adjust the plane's starting position.
+   * One can make sure that every location based parameter is available
+     in the cfgfile.
+
+2005-01-09 21:00 Jens Wilhelm Wulf
+
+   * GUI: keyboard input problem resolved and fixed. We need to call
+     SDL_EnableUNICODE(1) to get unicode from SDL.
+   * GUI: Using an own slider which displays the numerical value and allows
+     editing it.
+   * updated files in documentation
+
+2005-01-09 18:00 Jens Wilhelm Wulf
+   
+   * MAXJOYAXIS increased to seven. Joysticks with 8 axes should work now.
+   * Changed to make LoggerReader_ttyS compile on platforms other than linux.
+
+2005-01-09 Jens Wilhelm Wulf
+
+   * Workaround for the GUI using mouse motions although it is not visible
+     (see crrc_main.cpp, GUI_MOUSE_MOTION_WORKAROUND)
+   * Fault tolerant video mode switching
+   * GUI for video options. todo: why isn't it possible to edit the value in 
+     the combo box for fullscreen resolution?
+   * Replaced the whole complicated mechanism which determined how a certain
+     plane is launched at a certain location by something very simple -- GUI
+     based, presets can be loaded and defined.
+   * Launch angle needs work.
+   * Chosen model is saved to config.
+
+2005-01-08 21:00 Jens Wilhelm Wulf
+   
+   * Message boxes show errors which occur when trying to enable vario 
+     or engine sound.
+
+2005-01-08 18:30 Jens Wilhelm Wulf
+
+   * We had two variables describing the state of the simulation in
+     crrc_main.cpp: paused and resuming. I merged them into nState.
+   * Changed default message for not-yet-implemeted GUI options.
+   * Changed position of text in message box so that multiline messages
+     are displayed correctly.
+   * Options can be saved back to crrcsim.xml from GUI.
+   * Training mode can be toggled from GUI.
+   * Variometer can be toggled from GUI.
+   * Engine sound can be toggled from GUI.
+   * Fullscreen/window can be toggled from GUI. There are different options 
+     for screen resolutions in fullscreen/window mode. Window resolution is
+     saved with settings.
+   * Switching of input methods shows error message in messagebox.
+   
+2005-01-08 Jens Wilhelm Wulf
+   
+   * GUI: implemented reset of field_of_view
+   * GUI: removed 'toggle FPS', implemented 'toggle verbosity'.
+   * added zoom.h and zoom.cpp, automatic zooming.
+
+2005-01-07 22:22 Jens Wilhelm Wulf
+
+   * '-t' removed, reimplemented '-v' to show input values (but they are
+     shown in the GUI). Double '-v' gives input values and FPS.
+
+2005-01-07 Jens Wilhelm Wulf
+
+   * Separate input scalings for mouse and joystick.
+   * Reverting to mouse input if joystick init failed.
+   * Engine sound is possible again, but works with every input method now.
+   * The input method can be reconfigured by calling reconfigureInputMethod().
+     Of course options have to be changed in SimpleXMLTransfer* cfgfile before
+     to take effect. There is some _example_ code in crrc_keyboard.cpp to show
+     this (it is possible to change interfaces in flight via keypress). GUI,
+     please use it!
+        
+   
+2005-01-06 Jens Wilhelm Wulf
+
+   * Removed verbose output ('-v'), as this only meant to show input values,
+     which is done by '-t'.
+   * Re-enabled moving waves at Cape Cod.
+   * Additional methods in SimpleXMLTransfer to allow for easier changing
+     of values.
+   * Moved video options from crrcsim.cfg to crrcsim.xml. Most of them
+     are used only once and therefore remain only in the SimpleXMLTransfer,
+     their old corresponding variable in crrc_main.cpp has been deleted.
+     Some are used regularly, their variable is still there.
+     Some had been unused and were deleted.
+   * Other config values moved to crrcsim.xml, too.
+   * Every input method can be set via command line parameter.
+   * Mouse, keyboard and joystick now are a TXInterface, too.
+   * Inputs to the simulation engine are not global anymore. There is a
+     structure which is used to store and pass those values.
+   * Removed the function ls_cockpit(), it had only been called from one
+     place (inlined it there) and from another place where every value has
+     just to set to zero (which actually is another function).
+   * Now crrcsim.cfg is obsolete, as is crrc_parse_config.cpp.
+   * At the moment there is no call to changePitch(...) left, so there is
+     no engine sound (which only worked with keyboard input, anyway). 
+     
+
+2005-01-06 Jens Wilhelm Wulf
+
+   * The plane's natural velocity is calculated from .air-file. So the
+     velocity given in crrcsim.xml now is a factor to the plane's natural
+     velocity (1 means natural velocity, 2 means twice that fast).
+
+2005-01-05 Jens Wilhelm Wulf
+
+  * Starting altitude is calculated from .air-file. Not perfect yet, but
+    it works. So the altitude given in crrcsim.xml now is relative to ground
+    level.
+  * Mouse cursor is always visible if the mouse is used as input device.
+
+2005-01-04 19:08 Jan Reucker (slowhand_47)
+
+  * GUI/: puaScrListBox.cpp, puaScrListBox.h: Added missing methods
+    of the puListBox-API.
+  * GUI/: puaFileBox.cpp, puaFileBox.h: Added the ability to store a
+    file's path and to retrieve it. #include'd missing header.
+
+2005-01-01 19:30 Jan Reucker (slowhand_47)
+
+  * Makefile.common: Added new source files.
+  * crrc_main.cpp, crrc_main.h: Moved .air-file routines to
+    crrc_loadair.cpp. Removed some orphaned prototypes and variables.
+  * GUI/: crrc_gui_main.cpp, crrc_gui_main.h: Added new dialog and a
+    mouse motion handler.
+  * GUI/crrc_planesel.cpp: Commented out some debugging lines.
+  * GUI/: puaFileBox.cpp, puaFileBox.h: A scrollable ListBox widget
+    for PUI which shows files with a specific extension.
+  * GUI/: puaScrListBox.cpp, puaScrListBox.h: A scrollable ListBox
+    widget for PUI.
+  * GUI/: crrc_planesel.cpp, crrc_planesel.h: Dialog for menu entry
+    "Options->Airplane".
+  * crrc_loadair.cpp, crrc_loadair.h: New file containing routines
+    for loading .air files (from crrc_main.h).
+
+2004-12-25 12:00 Jan Reucker (slowhand_47)
+
+  * GUI/: crrc_dialog.cpp, crrc_dialog.h, crrc_gui_main.cpp,
+    crrc_gui_main.h, crrc_msgbox.cpp, crrc_msgbox.h: Moved all GUI
+    stuff to a subdir. Base class for dialogs added.
+  * crrc_gui_main.cpp, crrc_gui_main.h, crrc_gui_msgbox.cpp,
+    crrc_gui_msgbox.h, crrc_keyboard.c, crrc_main.cpp, crrc_main.h,
+    Makefile.common: Moved all GUI stuff to a subdir.
+
+2004-12-20 Jan Reucker (slowhand_47)
+
+  * Makefile.common: Moved some files from .c to .cpp
+  * default_model_routines.h: Removed "extern C" definition, funcs
+    are now plain C++
+  * default_model_routines.cpp: Substitutes default_model_routines.c
+  * default_model_routines.c: Replaced file by
+    default_model_routines.cpp
+  * crrc_engine.cpp: Substitutes crrc_engine.c
+  * crrc_aero.cpp: Substitutes crrc_aero.c
+  * crrc_aero.c, crrc_engine.c: Replaced files by equivalent files
+    with extension .cpp
+  * crrc_aero.c, crrc_engine.c, default_model_routines.c: Added a
+    comment that this file is obsolete now.
+
+2004-12-19 Jan Reucker (slowhand_47)
+
+  * crrc_main.cpp, crrc_main.h: Extended initialize_flight_model().
+    New function for dummy winch start.
+
+2004-12-17 Jan Reucker (slowhand_47)
+
+  * crrc_gui_main.cpp: When entering the GUI the mouse cursor will be
+    re-enabled, leaving the GUI disables the cursor.
+  * audio_interface/: audio_rc.c, rc_test.c: Corrected coding style,
+    no functional changes
+
+2004-12-16 Jan Reucker (slowhand_47):
+
+  * Makefile, Makefile.common, Makefile.linux, Makefile.linux64,
+    Makefile.macosx, Makefile.mingw, Makefile.sound: Added compiler
+    and linker flags for PLIB
+  * defines.h: Added a #define for a version string
+  * default_model_routines.c: Fixed a linker warning
+  * default_model_routines.h: Fixed a compiler warning
+  * crrc_keyboard.c: Changed the keymapping: q for quit, ESC for
+    show/hide GUI
+  * crrc_main.cpp, crrc_main.h: Changed the event handler to support
+    the GUI.
+  * ls_matrix.c: Fixed a compiler warning
+  * crrc_gui_main.cpp, crrc_gui_main.h: First version of a GUI. Lots
+    of not-implemented-yet-boxes...
+  * SimpleXMLTransfer.h: Translated interface documentation to
+    english.
+  * crrc_gui_msgbox.h, crrc_gui_msgbox.cpp: Simple PUI message box
+    class.
+
+2004-11-30 Jens Wilhelm Wulf:
+  * transmitter interface test: no need to show unused inputs
+  * added documentation/control_internal.txt
+  * changed codingstyle_astyle to what those like who have stated
+    their opinion
+
+2004-10-31 09:38  Jan Reucker:
+
+  * ImageLoaderTGA.cpp, ImageLoaderTGA.h: 
+     - Added RLE compression support for TGA library.
+     - Doxygen documentation
+
+2004-10-31 Jens Wilhelm Wulf:
+  *Fixed a bug in the audio and parallel interface; even more unification.
+  *todo: rctran also does sample PPM. Therefore it should use the decoding
+         logic provided by T_TX_InterfacePPM, like parallel and audio do.
+  *Downloaded portaudio to try out whether the audio interface seems to work
+   or not. It seems to be ok! Read audio_interface/readme.txt!
+  *Started documentation/compile.txt for compilation instructions.   
+
+  *Copied parts of the wiki (HowToConfigure) to documentation/options.txt and
+   others to documentation/control.txt.
+  *Added module and commandline option (-t) to test transmitter interface.
+
+2004-10-30 Jens Wilhelm Wulf:
+  *Changed style of assignments where GNU indent issued the warning 'old
+   style assignment ambiguity' in some files.
+  *Converted transmitter interface 'rctran' to new
+   transmitter-interface-scheme. cpu_speed is now adjusted in crrcsim.xml.
+  *Converted transmitter interface 'parallel1' to 'parallel3' to new
+   transmitter-interface-scheme. In fact this is just one interface using
+   LPT1, LPT2 or LPT3!
+   The port to use is now adjusted in crrcsim.xml.
+   This pulled a lot of stuff out of crrc_main.cpp...
+  *radio_type is not configured in crrcsim.cfg anymore, but in crrcsim.xml.
+   
+  *Implemented class for configuration options. Until now it only contains 
+   the flying location and how the plane is started. Cleaned up some things
+   related to it.
+   Now you can choose a location from a scenery file via command line (didn't
+   work before).
+   Sceneries from file have to be given including path (scenery/coast.xml),
+   just as it is done with models! This is true in crrcsim.cfg and on the
+   command line!
+   So now use crrcsim.xml to configure how to start planes at a certain
+   location and how to start a special plane at a special location.
+   Examples are in there.
+  *'Altitude' and 'Theta' are not read from the .air-file anymore, as they
+   are overwritten anyway. 
+  *initial_theta is used (had been fixed to 0 before).
+  *Configured default for start on DAVIS which works for *every* model currently
+   in cvs. As some models do have a gear, the altitude (of the CG!) has to
+   be above the ground as so others fall down a little...
+   The same is true for CAPE_COD and scenery/coast.xml.
+  *added documentation/options.txt
+  *Wind and thermals can be separately configured for every location via crrcsim.xml.
+  
+  *Makefiles updated
+  *added radio_type COCKPIT 
+  *Started integrating the audio transmitter interface to the current source.
+   It can be configured, but... 
+   Until now it reports that it is not OK in some way and so crrcsim reverts to mouse
+   input. Maybe it works after enabling it from crrc_config.h, maybe not.
+   For me it compiles, but can't be linked as I don't have portaudio.
+   I can't test it, anyway, since I don't have a PPM transmitter.  
+  
+2004-10-29 Jens Wilhelm Wulf:
+  *added this changelog
+  *sound (variometer and throttle) can be turned on/off via crrcsim.xml
+  *cleaned up makefiles
+  *warning about virtual destructor removed
+  *proposal for automatic coding style (target codingstyle in Makefile.linux)
+  *replaced macro in ls_matrix.c by inline function to make indent work

@@ -1,0 +1,139 @@
+# usage:
+#   make -f Makefile.linux         for optimized build
+#   make -f Makefile.linux debug   for debugging build
+
+include Makefile.common
+
+# Optimization options. Adjust for your system.
+OPT_FLAGS   := -O3  # -march=i686
+DEBUG_FLAGS := -g
+
+CC_MODULE = gcc
+CC  = g++
+C++ = g++
+
+# remove implicit rules
+.SUFFIXES:
+
+CRRC_CFLAGS = -Wall -Dlinux `sdl-config --cflags` \
+              -I./glut-3.7/include $(CFLAGS_PLIB)
+
+CRRC_LINKER_FLAGS = -lm -lGL -lGLU -lXi -lXt -lXmu \
+                    -lXext -L/usr/lib -L/usr/X11R6/lib \
+                    `sdl-config --libs` $(LFLAGS_PLIB)
+                    
+# If you are not using portaudio for the audio interface, remove
+# this and edit crrc_config.h accordingly
+CRRC_LINKER_FLAGS += -lportaudio
+
+
+RCTRAN_CFLAGS = -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer \
+                -fno-strength-reduce -D__RT__ -D__KERNEL__ -DMODULE -c
+
+all: crrcsim
+
+out/out.created:
+	@echo "--- Creating output directories"
+	@mkdir -p $(SUBDIRS_S)
+	@touch out/out.created
+
+clean:
+	rm -f ${CRRC_OBJECTS_S} ${CRRC_DEPS_S} out/out.created *~
+	-rmdir -p $(SUBDIRS_S)
+
+ifneq ($(MAKECMDGOALS),clean)
+include $(CRRC_DEPS_S)
+endif
+
+crrcsim: CRRC_CFLAGS := ${OPT_FLAGS} ${CRRC_CFLAGS}
+crrcsim: ${CRRC_OBJECTS_S}
+	@echo "--- Linking"
+	@$(CC) -o crrcsim ${CRRC_OBJECTS_S} ${CRRC_LINKER_FLAGS}
+
+debug: CRRC_CFLAGS := ${DEBUG_FLAGS} ${CRRC_CFLAGS}
+debug: ${CRRC_OBJECTS_S}
+	@echo "--- Linking (debugging enabled)"
+	@$(CC) -o crrcsim ${CRRC_OBJECTS_S} ${CRRC_LINKER_FLAGS}
+
+out/%.o: %.c
+	@echo "--- Compiling $<"
+	@$(CC) $< -o $@ -c ${CRRC_CFLAGS}
+
+out/%.o: %.cpp
+	@echo "--- Compiling $<"
+	@$(C++) $< -o $@ -c ${CRRC_CFLAGS}
+
+out/%.d: %.cpp out/out.created
+	@echo --- Deps: $<
+	@$(CC) -MM $< > $@.$$$$; \
+	sed 's,\($(notdir $*)\)\.o[ :]*,$(basename $@).o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+               
+out/%.d: %.c out/out.created
+	@echo --- Deps: $<
+	@$(CC) -MM $< > $@.$$$$; \
+	sed 's,\($(notdir $*)\)\.o[ :]*,$(basename $@).o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+               
+rctran.o: rctran.c mbuff.h
+	$(CC_MODULE) -o rctran.o rctran.c ${RCTRAN_CFLAGS} -I/lib/modules/`uname -r`/build/include
+
+mrproper:
+	rm -f ${CRRC_OBJECTS_S} *~ crrcsim crrcsim.exe rctran
+
+package: crrcsim
+	mkdir crrcsim-linux
+	cp crrcsim crrcsim.cfg crrcsim-linux/
+	cp *.air *.rgb *.bw *.tga *.jpg crrcsim-linux/
+	cp LICENSE README instructions.txt crrcsim-linux/
+	tar zcfvv crrcsim-linux.tgz crrcsim-linux
+	rm -rf crrcsim-linux
+
+codingstyle_indent:
+	@echo "forcing coding style"
+	@indent $(INDENT_CFG) $(CRRC_HEADERS)
+	@indent $(INDENT_CFG) $(CRRC_SRC_CPP)
+	@indent $(INDENT_CFG) $(CRRC_SRC_C)
+
+codingstyle_astyle:
+	@echo "forcing coding style"
+	@astyle $(ASTYLE_CFG) $(CRRC_HEADERS)
+	@astyle $(ASTYLE_CFG) $(CRRC_SRC_CPP)
+	@astyle $(ASTYLE_CFG) $(CRRC_SRC_C)
+
+install:
+	mkdir -p /usr/local/share/games/crrcsim/documentation/
+	mkdir -p /usr/local/share/games/crrcsim/models
+	mkdir -p /usr/local/share/games/crrcsim/scenery
+	mkdir -p /usr/local/share/games/crrcsim/sounds
+	mkdir -p /usr/local/share/games/crrcsim/textures
+	mkdir -p /usr/local/share/games/crrcsim/objects
+	cp -r ./documentation/* /usr/local/share/games/crrcsim/documentation/
+	cp -r ./models/*.xml   /usr/local/share/games/crrcsim/models/
+	cp ./scenery/*.xml  /usr/local/share/games/crrcsim/scenery/
+	cp ./scenery/*.tga  /usr/local/share/games/crrcsim/scenery/
+	cp -r ./sounds/* /usr/local/share/games/crrcsim/sounds/
+	cp ./textures/*.rgb /usr/local/share/games/crrcsim/textures/
+	cp ./textures/*.bw  /usr/local/share/games/crrcsim/textures/
+	cp ./objects/*.ac  /usr/local/share/games/crrcsim/objects/
+	cp ./packages/icons/crrcsim.png /usr/local/share/games/crrcsim/
+	mkdir -p /usr/local/bin
+	cp ./crrcsim /usr/local/bin/
+
+install_user:
+	mkdir -p ~/.crrcsim/models
+	mkdir -p ~/.crrcsim/scenery
+	mkdir -p ~/.crrcsim/sounds
+	mkdir -p ~/.crrcsim/textures
+	mkdir -p ~/.crrcsim/objects
+	cp -r ./models/*.xml   ~/.crrcsim/models/
+	cp ./scenery/*.xml  ~/.crrcsim/scenery/
+	cp ./scenery/*.tga  ~/.crrcsim/scenery/
+	cp -r ./sounds/* ~/.crrcsim/sounds/
+	cp ./textures/*.rgb ~/.crrcsim/textures/
+	cp ./textures/*.bw  ~/.crrcsim/textures/
+	cp ./objects/*.ac  ~/.crrcsim/objects/
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!! You still need to copy the file 'crrcsim' !!"
+	@echo "!! to somewhere you like.                    !!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
