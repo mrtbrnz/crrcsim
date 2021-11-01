@@ -1050,7 +1050,7 @@ void CRRCPanoDome::init_textures()
 
   // setup rendering state
   state = new ssgSimpleState () ;
- // state -> addTexture ( panotex ) ;
+  state -> addTexture ( panotex ) ;
   state -> disable  ( GL_LIGHTING ) ;
   state -> enable   ( GL_TEXTURE_2D ) ;
   state -> disable  ( GL_COLOR_MATERIAL ) ;
