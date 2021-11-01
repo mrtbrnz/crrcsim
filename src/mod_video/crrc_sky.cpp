@@ -74,7 +74,7 @@ static const char *boxtex_attribs[] =
 bool setup_sky(SimpleXMLTransfer *xml)
 {
   bool boReturn = true;
-  
+
   // create sky from scratch or reload?
   if (xml != NULL)
   {
@@ -85,7 +85,7 @@ bool setup_sky(SimpleXMLTransfer *xml)
     }
     sky_par = new SimpleXMLTransfer(xml);
   }
-  
+
   if (sky_par == NULL)
   {
     boReturn = false;
@@ -306,7 +306,7 @@ static const int _texels[4][2] =
  *  drawn without Z-buffering as the first element of
  *  the scene. Therefore it will always appear to be
  *  behind everything else regardless of the actual
- *  vertex positions. Choose a size that fits 
+ *  vertex positions. Choose a size that fits
  *  somewhere between near and far clipping plane. The
  *  default of 20.0 should fit many applications.
  *
@@ -331,14 +331,14 @@ SkyBox::SkyBox(const char **textures, float size, float texoffset)
     int raw_u = _texels[i][0];
     int raw_v = _texels[i][1];
     float texel_u, texel_v;
-    
-    texel_u = (raw_u == 0) ? 
-                ((float)raw_u + texoffset - 0.5f*FACE_OVERLAP) 
+
+    texel_u = (raw_u == 0) ?
+                ((float)raw_u + texoffset - 0.5f*FACE_OVERLAP)
               : ((float)raw_u + 0.5f*FACE_OVERLAP - texoffset);
-    texel_v = (raw_v == 0) ? 
-                ((float)raw_v + texoffset - 0.5f*FACE_OVERLAP) 
+    texel_v = (raw_v == 0) ?
+                ((float)raw_v + texoffset - 0.5f*FACE_OVERLAP)
               : ((float)raw_v + 0.5f*FACE_OVERLAP - texoffset);
-    
+
     sgSetVec2(texel, texel_u, texel_v);
     texco->add(texel);
   }
@@ -350,23 +350,23 @@ SkyBox::SkyBox(const char **textures, float size, float texoffset)
     int raw_u = _texels[i][0];
     int raw_v = _texels[i][1];
     float texel_u, texel_v;
-    
-    texel_u = (raw_u == 0) ? 
-                ((float)raw_u + texoffset - 0.5f*FACE_OVERLAP) 
+
+    texel_u = (raw_u == 0) ?
+                ((float)raw_u + texoffset - 0.5f*FACE_OVERLAP)
               : ((float)raw_u + 0.5f*FACE_OVERLAP - texoffset);
-    texel_v = (raw_v == 0) ? 
-                ((float)raw_v + texoffset - 0.5f*FACE_OVERLAP) 
+    texel_v = (raw_v == 0) ?
+                ((float)raw_v + texoffset - 0.5f*FACE_OVERLAP)
               : ((float)raw_v + 0.5f*FACE_OVERLAP - texoffset);
-    
+
     sgSetVec2(texel, texel_u, texel_v);
     texco->add(texel);
   }
   #endif
-  
+
   ssgVertexArray  *vertices;
   ssgLeaf         *vtable;
   ssgSimpleState  *state;
-  
+
   // set up the faces
   for (int i = 0; i < 6; i++)
   {
@@ -374,7 +374,7 @@ SkyBox::SkyBox(const char **textures, float size, float texoffset)
     {
       vertices = new ssgVertexArray(6);
       sgVec3 vertex;
-      
+
       // find the constant coordinate of this face
       typedef enum {CONST_X, CONST_Y, CONST_Z} CONST_FACE_T;
       CONST_FACE_T const_coord;
@@ -401,9 +401,9 @@ SkyBox::SkyBox(const char **textures, float size, float texoffset)
           // must be z
           const_coord = CONST_Z;
         }
-        
+
       }
-      
+
       #if (DRAW_MODE == 0)
       // draw triangles
       // draw first triangle of the face
@@ -425,7 +425,7 @@ SkyBox::SkyBox(const char **textures, float size, float texoffset)
         sgScaleVec3(vertex, boxsize);
         vertices->add(vertex);
       }
-  
+
       // draw second triangle of the face
       for (int k = 2; k < 5; k++)
       {
@@ -468,20 +468,20 @@ SkyBox::SkyBox(const char **textures, float size, float texoffset)
       #endif
 
       state = new ssgSimpleState();
-      state->setTexture(FileSysTools::getDataPath(textures[i]).c_str(), false, false);
+    //  state->addTexture(FileSysTools::getDataPath(textures[i]).c_str(), false, false);
       state->setShadeModel(GL_FLAT);
       state->enable(GL_TEXTURE_2D);
       state->disable(GL_COLOR_MATERIAL);
       state->disable(GL_BLEND);
       state->disable(GL_LIGHTING);
-      
-      
+
+
       vtable = new ssgVtxTable ( SKYBOX_PRIMITIVES,
                                  vertices,
                                  NULL,
                                  texco,
                                  NULL);
-      
+
       vtable->setState(state);
       skyboxtrans->addKid(vtable);
     }
@@ -555,16 +555,16 @@ SkyDome::SkyDome(float r, sgVec4 domecol, sgVec4 fogcol, sgVec4 cloudcol)
   // eliminate warnings
   sgdSetVec3(planetsDummy, radius+1000.0, radius+1000.0, radius+1000.0);
   sgdSetVec3(starsDummy, radius+1000.0, radius+1000.0, radius+1000.0);
-  
+
   theSky->build(radius, radius, 0, &planetsDummy, 0, &starsDummy);
-  
+
   sgCopyVec4(skyDomeCol, domecol);
   sgCopyVec4(skyFogCol, fogcol);
   sgCopyVec4(skyCloudCol, cloudcol);
-  
+
   repaint();
   //~ theSun = theSky->addBody(NULL, "textures/halo.rgba", 5000, 80000, true);
-      
+
   //~ clouds[0] =  theSky -> addCloud (
                           //~ "textures/scattered.rgba", // texture
                           //~ 100000,            // span
@@ -573,7 +573,7 @@ SkyDome::SkyDome(float r, sgVec4 domecol, sgVec4 fogcol, sgVec4 cloudcol)
                           //~ 100 );            // transition
   //~ clouds[0] -> setSpeed ( 50 ) ;
   //~ clouds[0] -> setDirection ( 45 ) ;
-      
+
 }
 
 
@@ -609,7 +609,7 @@ void SkyDome::update(sgVec3 *campos, double dt)
 
 /* ******************************************************** */
 
-/** 
+/**
  *  The constructor creates a sky dome with a given radius
  *  and cloud texture.
  *
@@ -668,7 +668,7 @@ void CRRCSkyDome::repaint(const char *texture)
   float   middle_texture[12][2];
   float   outer_texture[12][2];
   float   bottom_texture[12][2];
-  
+
   ssgVtxTable       *table;
   ssgVertexArray    *vertices;
   ssgTexCoordArray  *texels;
@@ -683,10 +683,10 @@ void CRRCSkyDome::repaint(const char *texture)
   // specified.
   sgVec4  sky_color;
   sgSetVec4(sky_color, 0.121, 0.355, 0.637, 1.0);
-  
+
   sgVec4  inner_color;
   sgSetVec4(inner_color, 0.207, 0.457, 0.734, 1.0);
-  
+
   sgVec4  middle_color;
   sgSetVec4(middle_color, 0.441, 0.679, 0.933, 1.0);
 
@@ -715,13 +715,13 @@ void CRRCSkyDome::repaint(const char *texture)
     use_textures = false;
   }
 
-                 
+
   float diameter = radius * 2;
 
   for ( int i = 0; i < 12; i++ )
   {
     float theta = (i * 30.0) * SG_DEGREES_TO_RADIANS;
-    
+
     inner_vertex[i][0]  = cos(theta) * INNER_RADIUS;
     inner_vertex[i][2]  = sin(theta) * INNER_RADIUS;
     inner_vertex[i][1]  = INNER_ELEV;
@@ -746,15 +746,15 @@ void CRRCSkyDome::repaint(const char *texture)
     bottom_texture[i][0]=(bottom_vertex[i][0] / diameter) + 0.5;
     bottom_texture[i][1]=(bottom_vertex[i][2] / diameter) + 0.5;
   }
-  
+
   skyroot = new ssgRoot();
-  
+
   state_tex = new ssgSimpleState();
-  
+
   if (use_textures)
   {
     fprintf(stdout, "Creating CRRCSkyDome with texture \"%s\"\n", texture);
-    state_tex->setTexture(texture);
+  //  state_tex->addTexture(texture);
     state_tex->enable(GL_TEXTURE_2D);
   }
   else
@@ -769,7 +769,7 @@ void CRRCSkyDome::repaint(const char *texture)
   state_tex->disable(GL_BLEND);
   state_tex->disable(GL_LIGHTING);
   state_tex->disable(GL_CULL_FACE);
-  
+
   // The top cap
   vertices  = new ssgVertexArray();
   texels    = new ssgTexCoordArray();
@@ -793,7 +793,7 @@ void CRRCSkyDome::repaint(const char *texture)
   sgSetVec2(texel, inner_texture[11][0], inner_texture[11][1]);
   texels->add(texel);
   colors->add(inner_color);
-  
+
   if (use_textures)
   {
     delete colors;
@@ -804,7 +804,7 @@ void CRRCSkyDome::repaint(const char *texture)
     delete texels;
     texels = NULL;
   }
-  
+
   table = new ssgVtxTable ( GL_TRIANGLE_FAN,
                              vertices,
                              NULL,
@@ -816,7 +816,7 @@ void CRRCSkyDome::repaint(const char *texture)
   table->recalcBSphere();
   skyroot->addKid(table);
 
-  
+
   // first ring
   vertices  = new ssgVertexArray();
   texels    = new ssgTexCoordArray();
@@ -829,7 +829,7 @@ void CRRCSkyDome::repaint(const char *texture)
     sgSetVec2(texel, middle_texture[i][0], middle_texture[i][1]);
     texels->add(texel);
     colors->add(middle_color);
-    
+
     sgSetVec3(vertex,  inner_vertex[i][0], inner_vertex[i][2], inner_vertex[i][1]);
     vertices->add(vertex);
     sgSetVec2(texel, inner_texture[i][0], inner_texture[i][1]);
@@ -846,7 +846,7 @@ void CRRCSkyDome::repaint(const char *texture)
   sgSetVec2(texel, inner_texture[0][0], inner_texture[0][1]);
   texels->add(texel);
   colors->add(inner_color);
-  
+
   if (use_textures)
   {
     delete colors;
@@ -857,7 +857,7 @@ void CRRCSkyDome::repaint(const char *texture)
     delete texels;
     texels = NULL;
   }
-  
+
   table = new ssgVtxTable(GL_TRIANGLE_STRIP,
                           vertices,
                           NULL,
@@ -868,7 +868,7 @@ void CRRCSkyDome::repaint(const char *texture)
   table->transform(it);
   table->recalcBSphere();
   skyroot->addKid(table);
-  
+
   // second ring
   vertices  = new ssgVertexArray();
   texels    = new ssgTexCoordArray();
@@ -881,7 +881,7 @@ void CRRCSkyDome::repaint(const char *texture)
     sgSetVec2(texel, outer_texture[i][0], outer_texture[i][1]);
     texels->add(texel);
     colors->add(outer_color);
-    
+
     sgSetVec3(vertex, middle_vertex[i][0], middle_vertex[i][2], middle_vertex[i][1]);
     vertices->add(vertex);
     sgSetVec2(texel, middle_texture[i][0], middle_texture[i][1]);
@@ -909,7 +909,7 @@ void CRRCSkyDome::repaint(const char *texture)
     delete texels;
     texels = NULL;
   }
-  
+
   table = new ssgVtxTable(GL_TRIANGLE_STRIP,
                           vertices,
                           NULL,
@@ -949,7 +949,7 @@ void CRRCSkyDome::repaint(const char *texture)
   sgSetVec2(texel, outer_texture[0][0], outer_texture[0][1]);
   texels->add(texel);
   colors->add(outer_color);
-  
+
   if (use_textures)
   {
     delete colors;
@@ -960,7 +960,7 @@ void CRRCSkyDome::repaint(const char *texture)
     delete texels;
     texels = NULL;
   }
-  
+
   table = new ssgVtxTable(GL_TRIANGLE_STRIP,
                           vertices,
                           NULL,
@@ -990,7 +990,7 @@ void CRRCSkyDome::preDraw()
 
 /* ******************************************************** */
 
-/** 
+/**
  *  The constructor creates a panorama dome with a given radius
  *  and texture.
  *
@@ -1047,20 +1047,20 @@ void CRRCPanoDome::init_textures()
     msg += texfilename;
     throw std::runtime_error(msg);
   }
-  
+
   // setup rendering state
   state = new ssgSimpleState () ;
-  state -> setTexture ( panotex ) ;
+ // state -> addTexture ( panotex ) ;
   state -> disable  ( GL_LIGHTING ) ;
   state -> enable   ( GL_TEXTURE_2D ) ;
   state -> disable  ( GL_COLOR_MATERIAL ) ;
   state -> disable  ( GL_CULL_FACE ) ;
   state -> disable  ( GL_BLEND ) ;
-  
+
   float tex_base = (2048.0f-768.0f) / 2048.0f;
   float ring_height = 768.0f / 2048.0f / PANO_NUM_RINGS;
   float slice_width = 1.0f / PANO_NUM_SLICES;
-  
+
   for (int i = 0; i < PANO_NUM_RINGS; i++)
   {
     // constant "v" coordinate on this ring
@@ -1131,7 +1131,7 @@ void CRRCPanoDome::render()
   }
   glEnd();
   glPointSize(1);
-  
+
   #elif (PANO_RENDER_MODE == 1)
   glBegin(GL_QUADS);
   glColor3f(1.0, 1.0, 1.0);
@@ -1151,7 +1151,7 @@ void CRRCPanoDome::render()
       glTexCoord2f(texco[i+1][k][0], texco[i+1][k][1]);
       glVertex3f(vertices[i+1][k][SG_X], vertices[i+1][k][SG_Y], vertices[i+1][k][SG_Z]);
     }
-    
+
     // last quad in a ring
     glTexCoord2f(texco[i][PANO_NUM_SLICES - 1][0], texco[i][PANO_NUM_SLICES - 1][1]);
     glVertex3f(vertices[i][PANO_NUM_SLICES - 1][SG_X], vertices[i][PANO_NUM_SLICES - 1][SG_Y], vertices[i][PANO_NUM_SLICES - 1][SG_Z]);

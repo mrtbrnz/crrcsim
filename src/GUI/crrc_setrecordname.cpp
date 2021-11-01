@@ -18,7 +18,7 @@
  * Boston, MA 02111-1307, USA.
  *
  */
-  
+
 #include "../i18n.h"
 #include "../global.h"
 #include "../aircraft.h"
@@ -43,7 +43,7 @@ static void CGUISetRecordnameCallback(puObject *obj);
 #define BUTTON_BOX_HEIGHT   (2*DLG_DEF_SPACE+DLG_DEF_BUTTON_HEIGHT)
 #define SCROLL_W            (16)
 
-CGUISetRecordNameDialog::CGUISetRecordNameDialog() 
+CGUISetRecordNameDialog::CGUISetRecordNameDialog()
             : CRRCDialog()
 {
   // height of a text label
@@ -61,13 +61,13 @@ CGUISetRecordNameDialog::CGUISetRecordNameDialog()
                                           1,    // num of arrow pairs
                                           SCROLL_W,   // slider width
                                           1);   // wrap text
-  help->setText(_("Both filename and description become effective when the flight log is finally closed (on flight reset, change of airplane/location, exit).\n"
+  help->addText(_("Both filename and description become effective when the flight log is finally closed (on flight reset, change of airplane/location, exit).\n"
                 "Without a name, the log will not be saved!\n"
                 "Your best F3F runs are named (and therefore saved) automatically.\n"
                 "Replay flight logs using 'Robots | Load Robot'."));
   help->disableInput();
-  
-  
+
+
   y -= SLIDER_H + DLG_DEF_SPACE + msg_height;
   filename = new puInput(DLG_DEF_SPACE,         y,
                          DLG_DEF_SPACE+ 200, y + SLIDER_H);
@@ -75,7 +75,7 @@ CGUISetRecordNameDialog::CGUISetRecordNameDialog()
   filename->setLabel(_("Filename:"));
   filename->setValue(Global::recorder->GetFilename().c_str());
   filename->setUserData(this);
-  
+
   // the description box
   y -= DESCRIPTION_H + DLG_DEF_SPACE + msg_height;
   description = new puaLargeInput(DLG_DEF_SPACE, y,
@@ -85,7 +85,7 @@ CGUISetRecordNameDialog::CGUISetRecordNameDialog()
                                   1);   // wrap text
   description->setLabelPlace(PUPLACE_TOP_LEFT);
   description->setLabel(_("Description:"));
-  description->setText(Global::recorder->descr.c_str());
+  description->addText(Global::recorder->descr.c_str());
 
   // finalize the dialog
   close();
@@ -110,13 +110,13 @@ CGUISetRecordNameDialog::~CGUISetRecordNameDialog()
 void CGUISetRecordnameCallback(puObject *obj)
 {
   CGUISetRecordNameDialog *dlg = (CGUISetRecordNameDialog*)obj;
-    
+
   if (obj->getIntegerValue() == CRRC_DIALOG_OK)
   {
-    Global::recorder->descr = dlg->description->getText();
+//    Global::recorder->descr = dlg->description->getText();
     Global::recorder->SetFilename(dlg->filename->getStringValue());
   }
-  
+
   Global::gui->hide();
   puDeleteObject(obj);
 }

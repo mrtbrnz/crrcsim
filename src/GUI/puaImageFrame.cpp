@@ -19,7 +19,7 @@
  * Boston, MA 02111-1307, USA.
  *
  */
-  
+
 
 // puaImageFrame.cpp - a frame housing a texture (image).
 
@@ -32,7 +32,7 @@
 puaImageFrame::puaImageFrame (int minx, int miny, int maxx, int maxy, ssgTexture *image)
 : puFrame(minx, miny, maxx, maxy)
 {
-  setTexture(image);
+  addTexture(image);
   this->setRenderCallback (puaImageFrameRenderCallback, this);
 }
 
@@ -40,7 +40,7 @@ puaImageFrame::puaImageFrame (int minx, int miny, int maxx, int maxy, ssgTexture
 /**
  * Change texture (image) drawn inside the frame
  */
-void puaImageFrame::puaImageFrameRenderCallback(puObject *obj, int x0, int y0, void *tmp) 
+void puaImageFrame::puaImageFrameRenderCallback(puObject *obj, int x0, int y0, void *tmp)
 {
   ssgTexture *image = ((puaImageFrame*)obj)->_image;
   if (image)

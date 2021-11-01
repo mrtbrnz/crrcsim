@@ -18,7 +18,7 @@
  * Boston, MA 02111-1307, USA.
  *
  */
-  
+
 
 // puaImageFrame.h - a frame housing a texture (image).
 
@@ -41,14 +41,14 @@ class puaImageFrame : public puFrame
 {
   public:
     puaImageFrame (int minx, int miny, int maxx, int maxy, ssgTexture *image = NULL);
-    void setTexture(ssgTexture *image) {_image = image;};
+    void addTexture(ssgTexture *image) {_image = image;};
     // getTexture() must be public to be accessible from the
     // renderCallback function, but it is not really needed outside
     ssgTexture* getTexture() {return _image;};
-  
+
   private:
     ssgTexture *_image;
-    
+
     static void puaImageFrameRenderCallback(puObject *obj, int x0, int y0, void *dlg);
 };
 

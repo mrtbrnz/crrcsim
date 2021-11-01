@@ -51,7 +51,7 @@ class BuiltinScenery : public Scenery
      *  \todo Make it work properly or delete it.
      */
     BuiltinScenery(const char *mapfile);
-  
+
     /**
      *  Destructor
      */
@@ -64,7 +64,7 @@ class BuiltinScenery : public Scenery
 
     // Draw normal vectors for debugging purposes
     void draw_normals(float length);
-  
+
     /**
      *  Set texturing mode.
      *
@@ -73,9 +73,9 @@ class BuiltinScenery : public Scenery
      *  off while the object was created. Make it work or
      *  delete it.
      */
-    void setTextures(bool yesno);
-  
-    /** 
+    void addTextures(bool yesno);
+
+    /**
      *  Get the terrain height at (x|z). Must be implemented
      *  by the child classes.
      *  \param x x coordinate
@@ -83,7 +83,7 @@ class BuiltinScenery : public Scenery
      *  \return terrain height at this point in ft
      */
     virtual float getHeight(float x, float z) = 0;
-    
+
     /**
      *  Get height and plane equation of the terrain at (x|z).
      *  Must be implemented by the child classes.
@@ -104,8 +104,8 @@ class BuiltinScenery : public Scenery
      *  Get wind components at position X_cg, Y_cg, Z_cg
      */
     virtual int getWindComponents(double X_cg, double Y_cg, double Z_cg,
-                                  float *x_wind_velocity, 
-                                  float *y_wind_velocity, 
+                                  float *x_wind_velocity,
+                                  float *y_wind_velocity,
                                   float *z_wind_velocity) = 0;
 
   protected:
@@ -114,13 +114,13 @@ class BuiltinScenery : public Scenery
 
     void setup_drawing_state();
     void restore_drawing_state();
-    
+
   private:
     void calculate_normals();
     void compile_display_list();
-  
+
     unsigned int list;
-  
+
     float size_x;
     float size_z;
     float offset_x;
@@ -146,14 +146,14 @@ class BuiltinSceneryDavis : public BuiltinScenery
     BuiltinSceneryDavis(SimpleXMLTransfer *xml, int sky_variant = 0);
     ~BuiltinSceneryDavis();
 
-    /** 
+    /**
      *  Get the terrain height at (x|z).
      *  \param x x coordinate
      *  \param z z coordinate
      *  \return terrain height at this point in ft
      */
     float getHeight(float x, float z);
-    
+
     /**
      *  Get height and plane equation of the terrain at (x|z).
      *  \param x x coordinate
@@ -172,7 +172,7 @@ class BuiltinSceneryDavis : public BuiltinScenery
      *  Get wind components at position X_cg, Y_cg, Z_cg
      */
     int getWindComponents(double X_cg,double Y_cg,double Z_cg,
-                          float *x_wind_velocity, 
+                          float *x_wind_velocity,
                           float *y_wind_velocity,
                           float *z_wind_velocity);
 
@@ -182,7 +182,7 @@ class BuiltinSceneryDavis : public BuiltinScenery
      */
     void draw(double current_time);
 
-    
+
   private:
     void read_textures(SimpleXMLTransfer *xml);
     void clear_textures();
@@ -246,14 +246,14 @@ class BuiltinSceneryCapeCod : public BuiltinScenery
     BuiltinSceneryCapeCod(SimpleXMLTransfer *xml, int sky_variant = 0);
     ~BuiltinSceneryCapeCod();
 
-    /** 
+    /**
      *  Get the terrain height at (x|z).
      *  \param x x coordinate
      *  \param z z coordinate
      *  \return terrain height at this point in ft
      */
     float getHeight(float x, float z);
-    
+
     /**
      *  Get height and plane equation of the terrain at (x|z).
      *  \param x x coordinate
@@ -272,15 +272,15 @@ class BuiltinSceneryCapeCod : public BuiltinScenery
      *  Get wind components at position X_cg, Y_cg, Z_cg
      */
     int getWindComponents(double X_cg,double Y_cg,double Z_cg,
-                          float *x_wind_velocity, 
+                          float *x_wind_velocity,
                           float *y_wind_velocity,
                           float *z_wind_velocity);
-  
+
     /**
      *  Draw the scenery
      */
     void draw(double current_time);
-    
+
   private:
     int location;
     void read_textures(SimpleXMLTransfer *xml);
