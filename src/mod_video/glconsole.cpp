@@ -19,7 +19,7 @@
  * Boston, MA 02111-1307, USA.
  *
  */
-  
+
 
 /** \file glconsole.cpp
  *
@@ -27,7 +27,7 @@
  *
  *  \author Jan Reucker (slowhand_47@gmx.de)
  */
- 
+
 #include "../include_gl.h"
 #include "glconsole.h"
 #include "../mod_misc/filesystools.h"
@@ -74,20 +74,20 @@ GlConsole::~GlConsole()
  * Therefore the list is walked head-to-tail while rendering the strings
  * from bottom to top until all the vertical space inside the console area is
  * filled.
- * 
+ *
  * \param window_width    current OpenGL window width
  * \param window_height   current OpenGL window height
  */
 void GlConsole::render(int window_width, int window_height)
 {
   std::list<std::string>::iterator it;
-  
+
   stateMachine();
-  
+
   if (state != HIDDEN)
   {
     setOpenGLState(window_width, window_height);
-    
+
     // render the background quad
     glBegin(GL_QUADS);
     glColor4f(bg_r, bg_g, bg_b, bg_a * relativeOpacity);
@@ -96,7 +96,7 @@ void GlConsole::render(int window_width, int window_height)
     glVertex2i(pos_x + size_x,  pos_y + size_y);
     glVertex2i(pos_x,           pos_y + size_y);
     glEnd();
-    
+
     // render the text
     glDisable(GL_BLEND);
     fontRenderer.begin();
@@ -111,11 +111,11 @@ void GlConsole::render(int window_width, int window_height)
     }
     fontRenderer.end();
     glEnable(GL_BLEND);
-    
+
     restoreOpenGLState();
   } // state != HIDDEN
 }
-    
+
 /**
  * The internal state machine of the console.
  */
@@ -132,7 +132,7 @@ void GlConsole::stateMachine()
         fadeOut();
       }
       break;
-      
+
     case FADING:
       relativeOpacity = 1.0 - ((clk.getAbsTime() - fadeStarted) * 1000.0 / (double)fade_time);
       if (relativeOpacity < 0)
@@ -144,7 +144,7 @@ void GlConsole::stateMachine()
         hide();
       }
       break;
-      
+
     case HIDDEN:
     default:
       relativeOpacity = 1.0;
@@ -156,15 +156,15 @@ void GlConsole::stateMachine()
  * This method adds new text to the console. Internally the text lines are
  * stored as a linked list of strings. New lines are prepended to the front
  * end of the list. If the string contains newline characters, the string will
- * be recursively split into several lines. Newlines, in general, will not be 
+ * be recursively split into several lines. Newlines, in general, will not be
  * stored in the list entries.
- * 
+ *
  * \param text    String to be displayed in the console
  */
 void GlConsole::print(std::string theText)
 {
   std::string::size_type  pos;
-  
+
   if (theText.size() > 0)
   {
     pos = theText.find('\n');    // search for a newline
@@ -196,7 +196,7 @@ void GlConsole::print(std::string theText)
 void GlConsole::addLine(std::string theLine)
 {
   int maxchars = (size_x - 2 * inner_border) / 8;   // only works for the specified FNT_BITMAP_8_BY_13
-  
+
   do
   {
     lines.push_front(theLine.substr(0, maxchars));
@@ -204,7 +204,7 @@ void GlConsole::addLine(std::string theLine)
   } while (theLine.size() > 0);
 
   recordActivity();
-  
+
   while (lines.size() > visibleLines)
   {
     lines.pop_back();
@@ -214,7 +214,7 @@ void GlConsole::addLine(std::string theLine)
 
 /**
  * Do all steps necessary if there was any kind of activity.
- */ 
+ */
 void GlConsole::recordActivity()
 {
   updateTimer();
@@ -237,35 +237,35 @@ void GlConsole::updateTimer()
   }
 }
 
-/** 
- * setup the AutoHide feature 
+/**
+ * setup the AutoHide feature
  */
 void GlConsole::setAutoHide(unsigned long display_time_ms, unsigned long fade_time_ms)
 {
   display_time = display_time_ms;
   fade_time = fade_time_ms;
 }
-    
+
 /**
- * show the console 
+ * show the console
  */
 void GlConsole::show()
 {
   state = VISIBLE;
   stateTimer = (double)display_time / 1000.0;
 }
-    
+
 /**
- * immediately hide the console without fading 
+ * immediately hide the console without fading
  */
 void GlConsole::hide()
 {
   state = HIDDEN;
   stateTimer = 0;
 }
-    
-/** 
- * fade out the console 
+
+/**
+ * fade out the console
  */
 void GlConsole::fadeOut()
 {
@@ -293,7 +293,7 @@ void GlConsole::setOpenGLState (int w, int h)
   glEnable       ( GL_BLEND ) ;
   glAlphaFunc    ( GL_GREATER, 0.1f ) ;
   glBlendFunc    ( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA ) ;
- 
+
   glViewport     ( 0, 0, w, h ) ;
   glMatrixMode   ( GL_PROJECTION ) ;
   glPushMatrix   () ;
@@ -318,7 +318,7 @@ void GlConsole::restoreOpenGLState ( void )
 }
 
 /**
- * set the color of the console background 
+ * set the color of the console background
  *
  * \param r   red component (0.0 ... 1.0)
  * \param g   green component (0.0 ... 1.0)
@@ -335,14 +335,14 @@ void GlConsole::setBGColor(float r, float g, float b, float a)
 
 
 /**
- * set the color of the console text 
+ * set the color of the console text
  *
  * \param r   red component (0.0 ... 1.0)
  * \param g   green component (0.0 ... 1.0)
  * \param b   blue component (0.0 ... 1.0)
  * \param a   alpha channel (opacity) (0.0 ... 1.0)
  */
-void GlConsole::setTextColor(float r, float g, float b, float a)
+void GlConsole::addTextColor(float r, float g, float b, float a)
 {
   text_r = r;
   text_g = g;

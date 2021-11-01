@@ -20,7 +20,7 @@
  * Boston, MA 02111-1307, USA.
  *
  */
-  
+
 
 // implementation of class CGUIPlaneSelectDialog
 
@@ -59,7 +59,7 @@ static void CGUIPlaneSelGraphicsCallback(puObject *obj);
 //#define DEBUG_GUI
 
 
-CGUIPlaneSelectDialog::CGUIPlaneSelectDialog() 
+CGUIPlaneSelectDialog::CGUIPlaneSelectDialog()
             : CRRCDialog(),
               cat(NULL), catList(NULL), catListSize(0),
               planes(NULL), planeList(NULL), planeListSize(0),
@@ -71,7 +71,7 @@ CGUIPlaneSelectDialog::CGUIPlaneSelectDialog()
   int msg_height  = puGetDefaultLegendFont().getStringHeight("jX")
                   + puGetDefaultLegendFont().getStringDescender()
                   + PUSTR_TGAP + PUSTR_BGAP;
-  
+
   int dw=700;
   int dh=600;
 
@@ -83,7 +83,7 @@ CGUIPlaneSelectDialog::CGUIPlaneSelectDialog()
     if (dh > wheight)
       dh = wheight;
   }
-    
+
   int x0 = DLG_DEF_SPACE;
   int x1 = 220;
   int x3 = dw-DLG_DEF_SPACE;
@@ -105,7 +105,7 @@ CGUIPlaneSelectDialog::CGUIPlaneSelectDialog()
                                   16,   // slider width
                                   1);   // wrap text
   description->disableInput();
-  description->setText("This is a short description of the selected model.");
+  description->addText("This is a short description of the selected model.");
 
   // Use launch default check box
   check_usedefault = new puButton(x1,             y2-4*DLG_DEF_BUTTON_HEIGHT-DLG_DEF_SPACE,             // x, y lower left
@@ -129,7 +129,7 @@ CGUIPlaneSelectDialog::CGUIPlaneSelectDialog()
   gbox->setCurrentItem(0);
   gbox->setUserData(this);
   gbox->setCallback(CGUIPlaneSelGraphicsCallback);
-  
+
   // Configuration selection box
   cbox = new puaComboBox(x2, y2-1*DLG_DEF_BUTTON_HEIGHT-2*msg_height, // x, y lower left
                          x3, y2-0*DLG_DEF_BUTTON_HEIGHT-2*msg_height, // x, y upper right
@@ -174,7 +174,7 @@ CGUIPlaneSelectDialog::CGUIPlaneSelectDialog()
 
   // find and highlight the current airplane
   SimpleXMLTransfer* ap = cfgfile->getChild("airplane");
-  
+
   int iCurrentGraphics = ap->attributeAsInt("graphics", 0);
   int iCurrentConfig   = ap->attributeAsInt("config", 0);
   std::string sCurrentPlane = ap->getString("file", "");
@@ -184,7 +184,7 @@ CGUIPlaneSelectDialog::CGUIPlaneSelectDialog()
     //std::cout << "Current plane: " << sCurrentPlane << std::endl;
 
     int index = -1;
-    
+
     for (std::vector<std::string>::size_type i = 0; i < plane_paths.size(); i++)
     {
       if (plane_paths[i] == sCurrentPlane)
@@ -229,7 +229,7 @@ CGUIPlaneSelectDialog::~CGUIPlaneSelectDialog()
 }
 
 
-/** 
+/**
  *  Scans all model directories for .air and .xml files
  *  and adds their complete paths to the mfiles vector.
  */
@@ -245,7 +245,7 @@ void CGUIPlaneSelectDialog::createMFileList(std::vector<std::string>& filelist)
   // allowed extensions:
   extlist.push_back("xml");
   extlist.push_back("air");
-  
+
   T_Config::getModelDirs(paths);
 
   for (unsigned int i = 0; i < paths.size(); i++)
@@ -254,7 +254,7 @@ void CGUIPlaneSelectDialog::createMFileList(std::vector<std::string>& filelist)
     {
       #ifdef DEBUG_GUI
       std::cerr << "createMFileList(): unable to open directory " << paths[i];
-      std::cerr << std::endl; 
+      std::cerr << std::endl;
       #endif
     }
     else
@@ -263,15 +263,15 @@ void CGUIPlaneSelectDialog::createMFileList(std::vector<std::string>& filelist)
       {
         std::string tmp;
         bool        fMatch = false;
-        
+
         tmp = ent->d_name;
-        
+
         for (unsigned int n=0; n<extlist.size() && fMatch == false; n++)
         {
           if (T_GUI_Util::checkExtension(tmp, extlist[n]))
             fMatch = true;
         }
-                   
+
         if (fMatch)
         {
           std::string fullpath = paths[i] + "/" + tmp;
@@ -304,7 +304,7 @@ void CGUIPlaneSelectDialog::updateCategories()
   }
 
   cats.push_back("All models");
-  
+
   for (unsigned int i = 0; i < mfiles.size(); i++)
   {
     SimpleXMLTransfer *model = NULL;
@@ -313,19 +313,19 @@ void CGUIPlaneSelectDialog::updateCategories()
       model = new SimpleXMLTransfer(mfiles[i]);
       SimpleXMLTransfer *xmlcateg = model->getChild("categories");
       int numcats = xmlcateg->getChildCount();
-      
+
       for (int k = 0; k < numcats; k++)
       {
         std::string currcat = xmlcateg->getChildAt(k)->getContentString();
         bool found = false;
-        
+
         std::vector<std::string>::iterator it = cats.begin();
         it++;   // Allways start behind "All models"
 
         while ((it != cats.end()) && (!found))
         {
           int c = currcat.compare(*it);
-          
+
           if (c == 0)
           {
             // found a duplicate
@@ -340,7 +340,7 @@ void CGUIPlaneSelectDialog::updateCategories()
           }
           it++;
         }
-        
+
         if (!found)
         {
           // new category, lexicographically greater than all
@@ -357,7 +357,7 @@ void CGUIPlaneSelectDialog::updateCategories()
   }
 
   catList = T_GUI_Util::loadnames(cats, catListSize);
-  
+
 }
 
 
@@ -370,10 +370,10 @@ void CGUIPlaneSelectDialog::getPlanesByCategory(std::vector<std::string>& planes
                                                 std::string category)
 {
   std::vector<std::string> mfiles;
-  
+
   planes.clear();
   createMFileList(mfiles);
-  
+
   if (category == "All models")
   {
     planes = mfiles;
@@ -388,7 +388,7 @@ void CGUIPlaneSelectDialog::getPlanesByCategory(std::vector<std::string>& planes
         model = new SimpleXMLTransfer(mfiles[i]);
         SimpleXMLTransfer *xmlcateg = model->getChild("categories");
         int numcats = xmlcateg->getChildCount();
-        
+
         for (int k = 0; k < numcats; k++)
         {
           std::string currcat = xmlcateg->getChildAt(k)->getContentString();
@@ -417,9 +417,9 @@ void CGUIPlaneSelectDialog::updatePlaneList()
 {
   std::vector<std::string> pnames;
   std::vector<std::string> paths_temp;
-  
+
   plane_paths.clear();
-  
+
   if (planeList != NULL)
   {
     T_GUI_Util::freenames(planeList, planeListSize);
@@ -429,21 +429,21 @@ void CGUIPlaneSelectDialog::updatePlaneList()
 
   // get a list of all planes in the category selected by the combo box
   getPlanesByCategory(paths_temp, cat->getStringValue());
-  
+
   // walk through temporary array and copy to pnames and plane_paths,
   // sorted by model names
   for (unsigned int i = 0; i < paths_temp.size(); i++)
   {
     std::string name = getModelName(paths_temp[i]);
-    
+
     std::vector<std::string>::iterator name_it = pnames.begin();
     std::vector<std::string>::iterator path_it = plane_paths.begin();
     bool found = false;
-    
+
     while ((name_it != pnames.end()) && !found)
     {
       int c = name.compare(*name_it);
-      
+
       if (c <= 0)
       {
         // duplicate name or next element is lexicographically greater,
@@ -452,11 +452,11 @@ void CGUIPlaneSelectDialog::updatePlaneList()
         plane_paths.insert(path_it, paths_temp[i]);
         found = true;
       }
-      
+
       name_it++;
       path_it++;
     }
-    
+
     if (!found)
     {
       // current item goes to the end of the list
@@ -467,8 +467,8 @@ void CGUIPlaneSelectDialog::updatePlaneList()
 
   // create a list of all names that can be used by the PUI widget
   planeList = T_GUI_Util::loadnames(pnames, planeListSize);
-  
-  // update the PUI listbox 
+
+  // update the PUI listbox
   planes->newList(planeList);
   planes->setValue((int)0);
   planes->invokeCallback();
@@ -487,7 +487,7 @@ std::string CGUIPlaneSelectDialog::getModelName(std::string path)
 {
   std::string name = "";
   SimpleXMLTransfer *model = NULL;
-  
+
   // first we try to read the name from the XML file
   try
   {
@@ -509,7 +509,7 @@ std::string CGUIPlaneSelectDialog::getModelName(std::string path)
   {
     std::string::size_type dot_index;
     std::string::size_type slash_index;
-    
+
     dot_index = path.find_last_of('.');
     if (dot_index == std::string::npos)
     {
@@ -523,7 +523,7 @@ std::string CGUIPlaneSelectDialog::getModelName(std::string path)
       // path did not contain a slash, take everything from the beginning
       slash_index = 0;
     }
-    
+
     if (slash_index >= dot_index)
     {
       // something is terribly wrong, there is a slash after the last dot!
@@ -531,10 +531,10 @@ std::string CGUIPlaneSelectDialog::getModelName(std::string path)
       slash_index = 0;
       dot_index = path.length() -1;
     }
-    
+
     name = path.substr(slash_index + 1, (dot_index - slash_index) - 1);
   }
-  
+
   return name;
 }
 
@@ -552,7 +552,7 @@ void CGUIPlaneSelectDialog::cleanUpConfigAndGraphics()
     nOptsGraphics = 0;
     gbox->newList(optsGraphics);
   }
-  
+
   if (optsConfig != NULL)
   {
     T_GUI_Util::freenames(optsConfig, nOptsConfig);
@@ -577,7 +577,7 @@ void CGUIPlaneSelectDialog::updateFileInfo()
     location_label_string = _("File: ");
     location_label_string += plane_paths[entry];
     location_label->setLabel(location_label_string.c_str());
-    
+
     // Update the description box and launch default checkbox
     description_string = "";
     try
@@ -609,13 +609,13 @@ void CGUIPlaneSelectDialog::updateFileInfo()
       #endif
     }
     description_string = T_GUI_Util::cleanText(description_string);
-    description->setText(description_string.c_str());
+    description->addText(description_string.c_str());
     description->setTopLineInWindow(0);
     description->setSelectRegion (0,0) ;
 
     // clean up the configuration option boxes
     cleanUpConfigAndGraphics();
-    
+
     // Check if there are any configuration options
     try
     {
@@ -646,7 +646,7 @@ void CGUIPlaneSelectDialog::updateFileInfo()
       }
       gbox->newList(optsGraphics);
       cbox->newList(optsConfig);
-      
+
       // greyOut() and activate() show no visual effect, so hide()/reveal() is used
       if (nOptsGraphics < 2)
         gbox->hide();
@@ -656,7 +656,7 @@ void CGUIPlaneSelectDialog::updateFileInfo()
         cbox->hide();
       else
         cbox->reveal();
-      
+
       delete xml;
     }
     catch (XMLException e)
@@ -683,7 +683,7 @@ void CGUIPlaneSelectDialog::updatePreview()
   int entry;
   std::string modelFile;
   std::string fname;
-  
+
   entry = planes->getIntegerValue();
   if ((entry >= 0) && (entry < planes->getNumItems()))
   {
@@ -694,10 +694,10 @@ void CGUIPlaneSelectDialog::updatePreview()
   {
     graphics = gbox->getCurrentItem();
 
-    try 
+    try
     {
       xml = new SimpleXMLTransfer(fname);
-      for (int i = 0; i < xml->getChildCount(); i++) 
+      for (int i = 0; i < xml->getChildCount(); i++)
       {
         SimpleXMLTransfer *child = xml->getChildAt(i);
         if (!child->getName().compare("graphics") && (graphics-- == 0))
@@ -710,7 +710,7 @@ void CGUIPlaneSelectDialog::updatePreview()
     }
     catch (XMLException e)
     {
-      if (xml) 
+      if (xml)
       {
         delete xml;
       }
@@ -748,7 +748,7 @@ bool CGUIPlaneSelectDialog::saveSelection() const
   std::string fname;
   bool bRet  =  false;
   int entry;
-  
+
   entry = planes->getIntegerValue();
   if ((entry >= 0) && (entry < planes->getNumItems()))
   {
@@ -765,7 +765,7 @@ bool CGUIPlaneSelectDialog::saveSelection() const
     #endif
 
     SimpleXMLTransfer* ap = cfgfile->getChild("airplane");
-    
+
     ap->setAttributeOverwrite("graphics", graphics);
     ap->setAttributeOverwrite("config", config);
     ap->setAttributeOverwrite("file", fname);
@@ -817,24 +817,24 @@ void CGUIPlaneSelGraphicsCallback(puObject *obj)
 void CGUIPlaneSelCallback(puObject *obj)
 {
   CGUIPlaneSelectDialog *dlg = (CGUIPlaneSelectDialog*)obj;
-    
+
   if (obj->getIntegerValue() == CRRC_DIALOG_OK)
   {
     // Dialog left by clicking OK
     if (dlg->saveSelection())
     {
       // User selected an existing airplane, load the new model
-            
+
       //~ std::cout << "selected: " << fname << std::endl;
       Global::aircraft->setModel(NULL);
 
       cfgfile->setAttributeOverwrite("airplane.use_default_launch",
                                       (dlg->getLoadLaunchDefault() == 0) ? "0" : "1");
-      
+
       try
       {
         loadAirplane();
-        
+
         // check if the user wants to load the default launch settings
         // for this airplane
         if (dlg->getLoadLaunchDefault() == 1)
@@ -846,27 +846,27 @@ void CGUIPlaneSelCallback(puObject *obj)
           {
             // o.k., take the values from the first preset
             SimpleXMLTransfer *def_launch = presets->getChildAt(0);
-            cfgfile->setAttributeOverwrite("launch.altitude", 
+            cfgfile->setAttributeOverwrite("launch.altitude",
                                            def_launch->getString("altitude", "0.0"));
 
-            cfgfile->setAttributeOverwrite("launch.velocity_rel", 
+            cfgfile->setAttributeOverwrite("launch.velocity_rel",
                                            def_launch->getString("velocity_rel", "0.0"));
-            
-            cfgfile->setAttributeOverwrite("launch.angle", 
+
+            cfgfile->setAttributeOverwrite("launch.angle",
                                            def_launch->getString("angle", "0.0"));
-            
-            cfgfile->setAttributeOverwrite("launch.sal", 
+
+            cfgfile->setAttributeOverwrite("launch.sal",
                                            def_launch->getString("sal", "0"));
-            cfgfile->setAttributeOverwrite("launch.rel_to_player", 
+            cfgfile->setAttributeOverwrite("launch.rel_to_player",
                                            def_launch->getString("rel_to_player", "1"));
-            cfgfile->setAttributeOverwrite("launch.rel_front",     
+            cfgfile->setAttributeOverwrite("launch.rel_front",
                                            def_launch->getString("rel_front", doubleToString(MODELSTART_REL_FRONT)));
-            cfgfile->setAttributeOverwrite("launch.rel_right", 
+            cfgfile->setAttributeOverwrite("launch.rel_right",
                                            def_launch->getString("rel_right", doubleToString(MODELSTART_REL_RIGHT)));
           }
-          
+
         }
-                
+
         initialize_flight_model();
         if (Global::soundserver != (CRRCAudioServer*)0)
           Global::soundserver->pause(false);
@@ -880,7 +880,7 @@ void CGUIPlaneSelCallback(puObject *obj)
       }
     }
   }
-  
+
   Global::gui->hide();
   puDeleteObject(obj);
 }

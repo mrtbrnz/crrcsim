@@ -181,7 +181,7 @@ BuiltinScenery::~BuiltinScenery()
  *
  *  \param yesno If set to true, use textures for drawing.
  */
-void BuiltinScenery::setTextures(bool yesno)
+void BuiltinScenery::addTextures(bool yesno)
 {
   use_textures = yesno;
 }
@@ -465,7 +465,7 @@ BuiltinSceneryDavis::BuiltinSceneryDavis(SimpleXMLTransfer *xml, int sky_variant
   if (use_textures)
   {
     using Video::make_texture;
-    
+
     int use_mipmaps = cfgfile->getInt("video.textures.fUse_mipmaps", 1);
     read_textures(xml);
     groundTexture = make_texture( ground_texture, GL_RGBA, GL_ALPHA,
@@ -542,7 +542,7 @@ void BuiltinSceneryDavis::read_textures(SimpleXMLTransfer *xml)
   try
   {
     using Video::read_rgbimage;
-    
+
     tex = xml->getChild("scene.textures");
 
     grass_texture=read_rgbimage(FileSysTools::getDataPath(tex->getString("grass.file")).c_str(),
@@ -731,7 +731,7 @@ float BuiltinSceneryDavis::getHeightAndPlane(float x_north, float y_east, float 
 
 
 /** \brief Get wind components at position X_cg, Y_cg, Z_cg
- *  
+ *
  */
 int BuiltinSceneryDavis::getWindComponents(double X_cg, double Y_cg, double Z_cg,
     float *x_wind_velocity, float *y_wind_velocity, float *z_wind_velocity)
@@ -740,7 +740,7 @@ int BuiltinSceneryDavis::getWindComponents(double X_cg, double Y_cg, double Z_cg
   *x_wind_velocity = -1 * flWindVel * cos(M_PI*cfg->wind->getDirection()/180);
   *y_wind_velocity = -1 * flWindVel * sin(M_PI*cfg->wind->getDirection()/180);
   *z_wind_velocity = 0.;
-  
+
   return 0;
 }
 
@@ -1573,7 +1573,7 @@ BuiltinSceneryCapeCod::BuiltinSceneryCapeCod(SimpleXMLTransfer *xml, int sky_var
   if (use_textures)
   {
     using Video::make_texture;
-    
+
     int use_mipmaps = cfgfile->getInt("video.textures.fUse_mipmaps", 1);
     read_textures(xml);
     waterTexture = make_texture(water_texture, GL_RGBA, GL_RGBA,
@@ -1616,7 +1616,7 @@ BuiltinSceneryCapeCod::BuiltinSceneryCapeCod(SimpleXMLTransfer *xml, int sky_var
 }
 
 /** \brief Get wind components at position X_cg, Y_cg, Z_cg
- *  
+ *
  */
 int BuiltinSceneryCapeCod::getWindComponents(double X_cg, double Y_cg, double Z_cg,
     float *x_wind_velocity, float *y_wind_velocity, float *z_wind_velocity)
@@ -1663,7 +1663,7 @@ int BuiltinSceneryCapeCod::getWindComponents(double X_cg, double Y_cg, double Z_
       }
     }
   }
-  
+
   return 0;
 }
 
@@ -2067,7 +2067,7 @@ void BuiltinSceneryCapeCod::read_textures(SimpleXMLTransfer *xml)
   try
   {
     using Video::read_rgbimage;
-    
+
     tex = xml->getChild("scene.textures");
 
     water_texture=read_rgbimage(FileSysTools::getDataPath(tex->getString("water.file")).c_str(),

@@ -78,7 +78,7 @@ CGUILoadRobotDialog::CGUILoadRobotDialog()
                                           1,    // num of arrow pairs
                                           SCROLL_W,   // slider width
                                           1);   // wrap text
-  help->setText(_("In case you check the box above, this robot will replace your manually controlled airplane.\n"
+  help->addText(_("In case you check the box above, this robot will replace your manually controlled airplane.\n"
                 "Load an airplane to regain manual control."));
   help->disableInput();
     
@@ -104,7 +104,7 @@ CGUILoadRobotDialog::CGUILoadRobotDialog()
                                   16,   // slider width
                                   0);   // wrap text
   description->disableInput();
-  description->setText(_("This is a short description of the selected record."));
+  description->addText(_("This is a short description of the selected record."));
 
   // finalize the dialog
   close();
@@ -136,7 +136,7 @@ std::string CGUILoadRobotDialog::getFilename()
 void CGUILoadRobotDialog::updateFileInfo()
 {
   RobotFile* rf = new RobotFile(getFilename());
-  description->setText(rf->ReadDescription().c_str());
+  description->addText(rf->ReadDescription().c_str());
   delete rf;
 }
 

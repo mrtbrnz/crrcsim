@@ -20,7 +20,7 @@
  * Boston, MA 02111-1307, USA.
  *
  */
-  
+
 
 // implementation of class CGUILocationDialog
 #include "../i18n.h"
@@ -58,7 +58,7 @@ static void CGUILocationCallback(puObject *obj);
 static void CGUILocationSelectCallback(puObject *obj);
 
 
-CGUILocationDialog::CGUILocationDialog() 
+CGUILocationDialog::CGUILocationDialog()
             : CRRCDialog(), cbox(NULL), preview_texture(NULL)
 {
   // gather information on all installed sceneries
@@ -70,17 +70,17 @@ CGUILocationDialog::CGUILocationDialog()
   std::vector<std::string> paths;
   std::vector<std::string> extlist;
   extlist.push_back("xml");
-  
+
   T_Config::getLocationDirs(paths);
   //std::cout << "Scanning scenery directories:" << std::endl;
-  
+
   for (unsigned int i = 0; i < paths.size(); i++)
   {
     if ((dir = opendir(paths[i].c_str())) == NULL)
     {
       #ifdef DEBUG_GUI
       std::cerr << "createFileList(): unable to open directory " << paths[i];
-      std::cerr << std::endl; 
+      std::cerr << std::endl;
       #endif
     }
     else
@@ -89,15 +89,15 @@ CGUILocationDialog::CGUILocationDialog()
       {
         std::string tmp;
         bool        fMatch = false;
-        
+
         tmp = ent->d_name;
-        
+
         for (unsigned int n=0; n<extlist.size() && fMatch == false; n++)
         {
           if (T_GUI_Util::checkExtension(tmp, extlist[n]))
             fMatch = true;
         }
-                   
+
         if (fMatch)
         {
           std::string fullpath = paths[i] + "/" + tmp;
@@ -149,10 +149,10 @@ CGUILocationDialog::CGUILocationDialog()
   int msg_height  = puGetDefaultLegendFont().getStringHeight("jX")
                   + puGetDefaultLegendFont().getStringDescender()
                   + PUSTR_TGAP + PUSTR_BGAP;
-  
+
   // top of the list box
-  int top_of_listbox = BUTTON_BOX_HEIGHT 
-                        + 2*DLG_DEF_SPACE 
+  int top_of_listbox = BUTTON_BOX_HEIGHT
+                        + 2*DLG_DEF_SPACE
                         + msg_height
                         + LIST_WIDGET_HEIGHT
                         + DESCRIPTION_HEIGHT;
@@ -161,7 +161,7 @@ CGUILocationDialog::CGUILocationDialog()
   cbox = new puaScrListBox (DLG_DEF_SPACE,
                             top_of_listbox - LIST_WIDGET_HEIGHT,
                             LIST_WIDGET_WIDTH,
-                            LIST_WIDGET_HEIGHT, 
+                            LIST_WIDGET_HEIGHT,
                             locationsList);
 
   cbox->setLabelPlace(PUPLACE_TOP_LEFT);
@@ -170,11 +170,11 @@ CGUILocationDialog::CGUILocationDialog()
   cbox->setUserData(this);
   cbox->setValue(curLocIndex);
 
-  ptext = new puText(DLG_DEF_SPACE, 
+  ptext = new puText(DLG_DEF_SPACE,
                      BUTTON_BOX_HEIGHT + DLG_DEF_SPACE + DESCRIPTION_HEIGHT);
   ptext->setLabel("File: /path/to/my/scenery.xml");
 
-  
+
   // Combo box for sky variant selection
   sbox = new puaComboBox(2*DLG_DEF_SPACE + LIST_WIDGET_WIDTH,
                         top_of_listbox - DLG_DEF_BUTTON_HEIGHT,
@@ -187,7 +187,7 @@ CGUILocationDialog::CGUILocationDialog()
   sbox->setLabel(_("Select sky or resolution:"));
   sbox->setUserData(this);
   sbox->setCallback(CGUISkySelectCallback);
-  
+
   // preview widget
   preview = new puaImageFrame (
           2*DLG_DEF_SPACE + LIST_WIDGET_WIDTH,
@@ -207,7 +207,7 @@ CGUILocationDialog::CGUILocationDialog()
                                   16,   // slider width
                                   1);   // wrap text
   description->disableInput();
-  description->setText("This is a short description of the selected scenery.");
+  description->addText("This is a short description of the selected scenery.");
   /*description->setLabelPlace(PUPLACE_TOP_LEFT);
   description->setLabel(_("Description:"));*/
 
@@ -217,7 +217,7 @@ CGUILocationDialog::CGUILocationDialog()
   sbox->setCurrentItem(curSkyVariant);
 
   close();
-  setSize(LIST_WIDGET_WIDTH + CONF_SEL_WIDTH + 4*DLG_DEF_SPACE, 
+  setSize(LIST_WIDGET_WIDTH + CONF_SEL_WIDTH + 4*DLG_DEF_SPACE,
           BUTTON_BOX_HEIGHT + LIST_WIDGET_HEIGHT + msg_height + 5*DLG_DEF_SPACE + DESCRIPTION_HEIGHT );
   setCallback(CGUILocationCallback);
   centerOnScreen();
@@ -289,7 +289,7 @@ void CGUILocationDialog::updateLocationInfo(int dlg_sky_index)
       description_string = _("No description available.");
     }
     description_string = T_GUI_Util::cleanText(description_string);
-    description->setText(description_string.c_str());
+    description->addText(description_string.c_str());
     description->setTopLineInWindow(0);
     description->setSelectRegion (0,0) ;
     delete xml;
@@ -300,11 +300,11 @@ void CGUILocationDialog::updateLocationInfo(int dlg_sky_index)
     std::cerr << "nLocId: " << nLocId << "   filesListSize: " << filesListSize << std::endl;
     return;
   }
-  
+
   // If the scenery offers more than one sky to choose from,
   // update the combo box. Else hide it.
   if(dlg_sky_index == -1)//if not valide index, update combo box
-  { 
+  {
     int sky_variant = 0;
     if ( sky_descriptions.size() > 1)
     {
@@ -330,14 +330,14 @@ void CGUILocationDialog::updateLocationInfo(int dlg_sky_index)
     }
     sbox->setCurrentItem(sky_variant);
   }
-  
+
 // Update preview
   {
     std::string filename;
     if (dlg_sky_index < 0) dlg_sky_index = 0;
     if ((int)sky_previews.size() >= (dlg_sky_index+1))
       filename = sky_previews[dlg_sky_index];//specific preview  of sky variant
-    if (filename == "") filename = preview_filename;//generic preview  of scenery     
+    if (filename == "") filename = preview_filename;//generic preview  of scenery
     if (filename == "")
     {
       preview->hide();
@@ -347,14 +347,14 @@ void CGUILocationDialog::updateLocationInfo(int dlg_sky_index)
       if (preview_texture) delete(preview_texture);
       std::string filename1 = FileSysTools::getDataPath(filename);
       preview_texture = new ssgTexture(filename1.c_str());
-      preview->setTexture(preview_texture);
+      preview->addTexture(preview_texture);
       preview->reveal();
     }
   }
 }
 /******
-    insert element in listes of location name and filename 
-    with respect of alpabetic order of location name. 
+    insert element in listes of location name and filename
+    with respect of alpabetic order of location name.
 ********/
 void CGUILocationDialog::lists_insert(std::string lname, std::string fullpath)
   {
@@ -420,7 +420,7 @@ bool CGUILocationDialog::saveSelection() const
   if ((newLocname != curLocName) || (newSkyVariant != curSkyVariant))
   {
     cfg->setLocation(filename.c_str(), newSkyVariant, cfgfile);
-      
+
     Scenery* new_scenery = loadScenery(FileSysTools::getDataPath(filename).c_str(),
                                        newSkyVariant);
     if (new_scenery)

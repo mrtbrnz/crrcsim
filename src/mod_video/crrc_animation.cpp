@@ -83,8 +83,8 @@ void createAnimation(SimpleXMLTransfer *animation, ssgEntity* model)
       }
       else
       {
-        std::cerr << "createAnimation: unknown animation type '"
-                  << type << "'" << std::cerr;
+       // std::cerr << "createAnimation: unknown animation type '"
+        //          << type << "'" << std::cerr;
       }
       
       if (anim != NULL)
